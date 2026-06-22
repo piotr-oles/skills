@@ -4,6 +4,8 @@ Agent skills for real engineering — not vibe coding.
 
 Small, composable, hackable. Based on decades of engineering experience.
 
+Inspired by [mattpocock/skills](https://github.com/mattpocock/skills).
+
 ## Engineering
 
 Skills for daily code work.
