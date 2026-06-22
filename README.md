@@ -24,6 +24,15 @@ Model- or user-reachable.
 - **[domain-modeling](./skills/engineering/domain-modeling/SKILL.md)** — Actively build and sharpen a project's domain model — challenge terms, stress-test with scenarios, update `CONTEXT.md` and ADRs inline.
 - **[codebase-design](./skills/engineering/codebase-design/SKILL.md)** — Shared vocabulary for designing deep modules: small interfaces, clean seams, testable through the interface.
 
+## Subagents
+
+- **[developer](./subagents/developer.md)** — Staff engineer. Implements complex features. Quality over speed, maintainability over diff size.
+- **[explorer](./subagents/explorer.md)** — Reconnaissance agent. Explores codebase and gathers context without making changes.
+- **[logic-reviewer](./subagents/logic-reviewer.md)** — Catches bugs, incorrect behavior, and missing test coverage.
+- **[system-design-reviewer](./subagents/system-design-reviewer.md)** — Catches structural problems, API design issues, and maintainability risks.
+- **[refactor-reviewer](./subagents/refactor-reviewer.md)** — Finds code smells, maps them to Fowler patterns, prioritizes by friction.
+- **[project-manager](./subagents/project-manager.md)** — Turns feature requests and bug reports into high-level tickets from a user/product perspective.
+
 ## Credits
 
 Inspired by [mattpocock/skills](https://github.com/mattpocock/skills), some skills are literally copy-pasted.

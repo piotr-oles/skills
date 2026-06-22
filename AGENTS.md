@@ -1,3 +1,5 @@
+Subagents live in `subagents/`. Each `.md` file defines one subagent — its model, tools, included skills, and system prompt.
+
 Skills are organized into bucket folders under `skills/`:
 
 - `engineering/` — daily code work
