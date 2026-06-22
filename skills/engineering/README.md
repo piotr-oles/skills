@@ -6,6 +6,7 @@ Skills for daily code work.
 
 Reachable only when you type them (`disable-model-invocation: true`).
 
+- **[grill](./grill/SKILL.md)** — Relentlessly interviewed about a plan or design until every branch of the decision tree is resolved.
 - **[grill-with-docs](./grill-with-docs/SKILL.md)** — Grilling session that also builds the project's domain model, sharpening terminology and updating `CONTEXT.md` and ADRs inline.
 - **[implement](./implement/SKILL.md)** — Execute a plan end-to-end: git setup, TDD, typecheck, review loop.
 - **[review](./review/SKILL.md)** — Spawn logic, system design, and refactor reviewers in parallel, address feedback, send follow-ups.
