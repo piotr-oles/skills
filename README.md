@@ -19,6 +19,7 @@ Reachable only when you type them (`disable-model-invocation: true`).
 
 Model- or user-reachable.
 
+- **[refactoring](./skills/engineering/refactoring/SKILL.md)** — Spot refactoring opportunities, map code smells to Fowler patterns, choose safe refactoring before feature work or cleanup.
 - **[agent-browser](./skills/engineering/agent-browser/SKILL.md)** — Browser automation via CDP: accessibility-tree snapshots, auth state, multi-tab, React introspection.
 - **[tdd](./skills/engineering/tdd/SKILL.md)** — Test-driven development with red-green-refactor loop, one vertical slice at a time.
 - **[domain-modeling](./skills/engineering/domain-modeling/SKILL.md)** — Actively build and sharpen a project's domain model — challenge terms, stress-test with scenarios, update `CONTEXT.md` and ADRs inline.

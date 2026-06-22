@@ -4,6 +4,7 @@ description: Describe work from user/product perspective
 model: anthropic/claude-sonnet-4-6
 thinking_level: medium
 included_tools: read, bash, web_search, code_search, fetch_content, get_search_content
+included_subagents: explorer
 included_skills: kando, agent-browser, atlassian-cli, librarian
 ---
 

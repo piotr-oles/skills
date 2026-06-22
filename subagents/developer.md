@@ -4,7 +4,7 @@ description: Implement complex features. Quality over speed. Maintainability ove
 model: anthropic/claude-sonnet-4-6
 thinking_level: high
 included_tools: read, edit, write, bash, web_search, code_search, fetch_content, get_search_content
-included_skills: kando, agent-browser, atlassian-cli, librarian, tdd, refactoring, fetch-ci-results
+included_skills: agent-browser, librarian, tdd, refactoring
 included_subagents: explorer
 ---
 

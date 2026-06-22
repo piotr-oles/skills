@@ -2,8 +2,9 @@
 name: system-design-reviewer
 description: Deep design review, catch structural problems, API design issues, and maintainability risks. Has its own output format, don't provide it in the prompt.
 model: anthropic/claude-sonnet-4-6
+thinking_level: high
 included_subagents: explorer
-included_skills: agent-browser, atlassian-cli, fetch-ci-results, librarian, refactoring
+included_skills: librarian, refactoring, codebase-design
 ---
 
 # System Design Reviewer Subagent

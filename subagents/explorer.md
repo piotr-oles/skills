@@ -4,7 +4,7 @@ description: Fast codebase exploration - gathers context without making changes
 model: anthropic/claude-haiku-4-5
 thinking_level: low
 included_tools: read, bash, web_search, code_search, fetch_content, get_search_content
-included_skills: kando, agent-browser, atlassian-cli, librarian
+included_skills: agent-browser, librarian
 ---
 
 # Explorer Subagent

@@ -2,8 +2,9 @@
 name: refactor-reviewer
 description: Deep refactoring review using Fowler patterns and design patterns. Finds code smells, maps them to concrete refactorings, and prioritizes by how much they block change or hide intent. Has its own output format, don't provide it in the prompt.
 model: anthropic/claude-sonnet-4-6
+thinking_level: high
 included_subagents: explorer
-included_skills: agent-browser, atlassian-cli, fetch-ci-results, librarian, refactoring
+included_skills: librarian, refactoring
 ---
 
 # Refactor Reviewer Subagent

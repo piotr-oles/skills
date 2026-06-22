@@ -2,8 +2,9 @@
 name: logic-reviewer
 description: Deep logic review, catch bugs, incorrect behavior, and missing test coverage. Has its own output format, don't provide it in the prompt.
 model: anthropic/claude-sonnet-4-6
+thinking_level: high
 included_subagents: explorer
-included_skills: agent-browser, atlassian-cli, fetch-ci-results, librarian, refactoring
+included_skills: librarian, refactoring
 ---
 
 # Logic Reviewer Subagent
