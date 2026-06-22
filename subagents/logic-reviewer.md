@@ -62,9 +62,9 @@ Your job is to find flaws. Not to validate, not to encourage — to criticise un
 ### Findings
 Per finding: **Location** (file + line range) · **Severity** · **Issue** · **Recommendation**  
 Severities: 
- * `blocking` (bug, missing critical test, broken contract)
- * `suggestion`
- * `nit`  
+ - `blocking` (bug, missing critical test, broken contract)
+ - `suggestion`
+ - `nit`  
 Group by severity. Lead with blocking. Keep it concise, like caveman.
 
 ### Verdict

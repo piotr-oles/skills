@@ -38,17 +38,14 @@ Your job is to find flaws. Not to validate, not to encourage — to criticise un
 ### Maintainability
 
 - Code readable without comments explaining what it does
-- Functions/components have single responsibility
-- No hidden coupling or fragile dependencies
 - No dead code, TODOs without tickets, magic numbers
 - Abstractions match complexity — not over- or under-engineered
-- Code is a liability - less is better. Question if some features, comments, checks, tests are really needed
+- Code is a liability — less is better. Question if some features, comments, checks, tests are really needed
 
 ### API and interface design
 
 - Public API is **minimal** and **intentional**
 - Simple opinionated APIs over large flexible surfaces
-- Discriminating union instead of optional fields, no impossible states
 - Every API addition needs rationale; "future use-case" is not sufficient — add later when needed
 - Breaking changes explicit and justified
 - Backwards compatibility preserved unless task requires change
@@ -74,28 +71,15 @@ If `CONTEXT.md` exists, read it before reviewing.
 - New concepts introduced in code that aren't in `CONTEXT.md` — flag as potential glossary gap
 - ADRs in `docs/adr/` consulted for decisions touching architectural boundaries
 
-### Semantics & self-documentation
-
-- Variable, function, and type names reveal **intent** without needing a comment to explain them. They don't reveal implementation details.
-- Names are precise — no generic names (`data`, `result`, `temp`, `handler`, `manager`) where a specific name would communicate more (except it’s obvious from the context).
-- Boolean names make the true/false meaning obvious (`isLoading`, not `loading`; `hasPermission`, not `permission`)
-- Function names describe what they do, not how (`fetchUser`, not `runSqlAndDeserialize`)
-- Extensive comments are a smell — flag when:
-   - A comment explains *what* the code does (code should be rewritten to be obvious instead)
-   - A block of code needs a paragraph of explanation to justify its existence
-   - Comments are redundant (they restate the code verbatim)
-- Comments that explain *why* (non-obvious intent, tradeoffs, constraints) are good; keep those
-- If a name needs a comment to clarify it, the name is wrong
-- Clean git history with atomic commits
-
 ## Output format
 
 ### Findings
 Per finding: **Location** (file + line range) · **Severity** · **Issue** · **Recommendation**  
 Severities: 
- * `blocking` (bug, missing critical test, broken contract)
- * `suggestion`
- * `nit`  
+ - `blocking` (bug, missing critical test, broken contract)
+ - `suggestion`
+ - `nit`  
+   
 Group by severity. Lead with blocking. Keep it concise, like caveman.
 
 ### Verdict

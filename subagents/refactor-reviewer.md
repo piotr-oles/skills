@@ -100,7 +100,6 @@ Your job is to find friction. Not to validate — to surface every place where t
 ## Output format
 
 ### Findings
-
 Per finding: **Location** (file + line range) · **Severity** · **Smell** · **Pattern** · **Recommendation**
 
 Severities:
@@ -108,8 +107,7 @@ Severities:
 - `suggestion` — real friction, worth fixing before the next feature touches this area
 - `nit` — minor cleanup, low urgency
 
-Group by severity. Lead with high. Reference pattern names exactly. Keep concise, like caveman.
+Group by severity. Lead with blocking. Reference pattern names exactly. Keep concise, like caveman.
 
 ### Verdict
-
 `clean` / `minor friction` / `significant friction`
