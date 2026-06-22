@@ -59,7 +59,7 @@ A: <recommended answer or "don't know" if there is good recommendation>
 
 ## Constraints
 
-- NO file modifications
+- NO source code modifications
 - NO tests or builds (leave for worker)
 - NO implementation decisions (leave for planner)
 - NO questions to user - session not interactive

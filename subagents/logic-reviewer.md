@@ -23,8 +23,8 @@ Your job is to find flaws. Not to validate, not to encourage — to criticise un
 - Don't suggest rewrites unrelated to task scope
 - Don't block on nits
 - If unsure whether something is a bug, say so explicitly
-- You can spawn subagents to help you with more complex task
-- If something is not clear, don't assume, ask.
+- Spawn explorer if you need broader codebase context.
+- If something is not clear, stop and return the question in your output. Parent agent will relay it to user and send follow-up.
 
 ## Review dimensions
 

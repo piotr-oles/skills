@@ -27,7 +27,7 @@ Your job is to find friction. Not to validate — to surface every place where t
 - Don't suggest rewrites unrelated to task scope
 - Reference patterns by exact name from the skill (e.g. *Replace Boolean Flags with State Union*, *Extract Role Interface*)
 - Focus on structural friction, not cosmetic preferences
-- If something is not clear, don't assume, ask
+- If something is not clear, stop and return the question in your output. Parent agent will relay it to user and send follow-up.
 
 ## Review dimensions
 
@@ -104,7 +104,7 @@ Your job is to find friction. Not to validate — to surface every place where t
 Per finding: **Location** (file + line range) · **Severity** · **Smell** · **Pattern** · **Recommendation**
 
 Severities:
-- `high` — actively blocks change, hides intent to the point of causing bugs, or encodes impossible states the type system could prevent
+- `blocking` — actively blocks change, hides intent to the point of causing bugs, or encodes impossible states the type system could prevent
 - `suggestion` — real friction, worth fixing before the next feature touches this area
 - `nit` — minor cleanup, low urgency
 

@@ -943,7 +943,7 @@ Encapsulate Record controls access to a record whose shape, field names, or muta
 - Mutable record references leak across module boundaries.
 - JSON/API-style nested data receives direct reads and writes in multiple places.
 
-## TypeScript Approach
+## Example
 
 For **immutable data** — define a typed interface or type alias; callers read fields directly:
 
@@ -2302,7 +2302,7 @@ Complex construction should not be the caller's responsibility. Extract the cons
 - Test setup building the same object with minor variations.
 - Boolean or enum parameters selecting a construction mode.
 
-## TypeScript Approach
+## Example
 
 Fluent builder — each configuration method returns `this`; `build()` validates and returns a `Readonly<T>`:
 
@@ -2364,7 +2364,7 @@ A complex subsystem should expose a simple surface for common use cases. Introdu
 - A subsystem has many low-level classes with no obvious entry point.
 - Changing an internal library forces changes in many caller files.
 
-## TypeScript Approach
+## Example
 
 A facade is usually a plain exported function or a thin module:
 
@@ -2429,7 +2429,7 @@ Cross-cutting behavior should wrap an existing object or function rather than be
 - A class growing with concerns that are not its core responsibility.
 - Adding a new cross-cutting concern requires touching every implementation.
 
-## TypeScript Approach
+## Example
 
 **Function decorator** — wrap any function with the same signature:
 
@@ -2504,7 +2504,7 @@ A component that changes state should not need to know what reacts to it. Let de
 - Component A imports Component B only to notify it of a change.
 - Tests for the producer become complex because they must account for all notification side effects.
 
-## TypeScript Approach
+## Example
 
 **Typed event bus**:
 
@@ -2582,7 +2582,7 @@ When processing a request through multiple potential handlers, do not hard-code 
 - Adding a new processing step requires modifying the central dispatch function.
 - Validation chains, permission checks, or request transforms applied sequentially.
 
-## TypeScript Approach
+## Example
 
 **Middleware array** (functional, preferred in TypeScript):
 
@@ -2649,7 +2649,7 @@ State that must be restored should be captured outside the object. Take immutabl
 - Rollback logic owned by callers rather than by the state holder.
 - Tests reconstructing prior state manually after assertions.
 
-## TypeScript Approach
+## Example
 
 In TypeScript the memento is a plain, serializable typed value — no special class needed:
 
@@ -2716,7 +2716,7 @@ Producing all values upfront couples the producer to memory and forces consumers
 - Memory pressure from large intermediate arrays.
 - Pagination logic that fetches all pages before returning results.
 
-## TypeScript Approach
+## Example
 
 **Replace array builder with a synchronous generator**:
 
