@@ -1,64 +1,24 @@
 ---
 name: address-pr
 description: Fetch and address PR feedback. Use when user asks to address PR comments, review feedback, or respond to PR suggestions.
+disable-model-invocation: true
 ---
 
 # Address PR Feedback
 
+Scripts live next to this `SKILL.md`. Derive `SKILL_DIR` from the path of this file, then run from repo root.
+
 ## Step 1: Find the PR
 
 ```bash
-gh pr list --head $(git rev-parse --abbrev-ref HEAD)
-```
-
-If no result, find by commit SHA:
-
-```bash
-commit_sha=$(git rev-parse HEAD)
-repo=$(gh repo view --json nameWithOwner -q .nameWithOwner)
-gh api "repos/${repo}/commits/${commit_sha}/pulls" --jq '.[0].number'
+SKILL_DIR=$(dirname /path/to/this/SKILL.md)   # substitute actual path
+PR=$(bash "$SKILL_DIR/find-pr.sh")
 ```
 
 ## Step 2: Fetch all feedback
 
-Fetch inline comments, reviews, and issue-level comments in one pass:
-
 ```bash
-PR=<number>
-REPO=$(gh repo view --json nameWithOwner -q .nameWithOwner)
-
-gh api repos/${REPO}/pulls/${PR}/comments \
-  | python3 -c "
-import sys, json
-cs = json.load(sys.stdin)
-print(f'{len(cs)} inline comment(s)')
-for c in cs:
-    print(f'--- {c[\"user\"][\"login\"]} on {c[\"path\"]}:{c.get(\"line\",\"?\")}')
-    print(c['body'])
-    print()
-"
-
-gh api repos/${REPO}/pulls/${PR}/reviews \
-  | python3 -c "
-import sys, json
-rs = json.load(sys.stdin)
-print(f'{len(rs)} review(s)')
-for r in rs:
-    print(f'--- {r[\"user\"][\"login\"]} [{r[\"state\"]}]')
-    if r.get('body'): print(r['body'])
-    print()
-"
-
-gh api repos/${REPO}/issues/${PR}/comments \
-  | python3 -c "
-import sys, json
-cs = json.load(sys.stdin)
-print(f'{len(cs)} issue comment(s)')
-for c in cs:
-    print(f'--- {c[\"user\"][\"login\"]}')
-    print(c['body'])
-    print()
-"
+bash "$SKILL_DIR/fetch-pr-feedback.sh" "$PR"
 ```
 
 ## Step 3: Address each piece of feedback
@@ -89,5 +49,6 @@ git push --force-with-lease
 
 ## Notes
 
+- Scripts sit next to this `SKILL.md`. Set `SKILL_DIR` to this file's parent directory before calling them.
 - If `git` commands fail with "not a git repository / must be run in a work tree", the shell is inside a worktree whose `GIT_DIR` env is unset. Use explicit flags: `git --work-tree=. --git-dir=.git <cmd>`.
 - If the PR description also contains stale information addressed by the feedback, update it: `gh pr edit <number> --body "..."`.
