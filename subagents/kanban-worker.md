@@ -83,13 +83,13 @@ From board home, create an isolated worktree branching off `origin/main` — doe
 
 ```bash
 cd <board-home>
-git worktree add ../kanban-md-task-<ID> --no-track -b task/<ID>-<kebab-description> origin/main
+git worktree add ../kanban-<REPO_NAME>-task-<ID> --no-track -b task/<ID>-<kebab-description> origin/main
 ```
 
 Leave a note on the board:
 
 ```bash
-kanban-md edit <ID> --append-body "Worktree: ../kanban-md-task-<ID>  Branch: task/<ID>-<kebab-description>" --timestamp --claim <agent>
+kanban-md edit <ID> --append-body "Worktree: ../kanban-<REPO_NAME>-task-<ID>  Branch: task/<ID>-<kebab-description>" --timestamp --claim <agent>
 ```
 
 ### Step 3 — Implement via developer subagent
@@ -97,7 +97,7 @@ kanban-md edit <ID> --append-body "Worktree: ../kanban-md-task-<ID>  Branch: tas
 Delegate implementation to `developer` subagent. Provide:
 
 - Full task description (from `kanban-md show`)
-- Worktree path: `../kanban-md-task-<ID>` (absolute: `<board-home>/../kanban-md-task-<ID>`)
+- Worktree path: `../kanban-<REPO_NAME>-task-<ID>` (absolute: `<board-home>/../kanban-<REPO_NAME>-task-<ID>`)
 - Branch name: `task/<ID>-<kebab-description>`
 - Expectation: implement, test, atomic commits on branch — do NOT merge to main
 
@@ -115,7 +115,7 @@ After `developer` finishes and all checks pass in the worktree, move task to `re
 kanban-md handoff <ID> --claim <agent> \
   --note "## Ready for Review
 - Branch: task/<ID>-<kebab-description>
-- Worktree: ../kanban-md-task-<ID>
+- Worktree: ../kanban-<REPO_NAME>-task-<ID>
 - Summary: <what was implemented>
 - Tests: <passed/failed/skipped>
 - Next step: review code, merge branch to main, move to done" \
@@ -192,7 +192,7 @@ Block a task (and move to `review`) earlier than implementation when you need:
 [How many tasks moved to review, brief overview]
 
 ## Tasks Ready for Review
-- [ID] [title] — branch: task/<ID>-… worktree: ../kanban-md-task-<ID>
+- [ID] [title] — branch: task/<ID>-… worktree: ../kanban-<REPO_NAME>-task-<ID>
 
 ## Blocked / Skipped
 - [ID] [title] — reason
