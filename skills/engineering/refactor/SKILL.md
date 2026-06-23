@@ -1,5 +1,5 @@
 ---
-name: refactoring
+name: refactor
 description: Use when reviewing or changing code to spot refactoring opportunities, map code smells to Fowler refactoring patterns, and choose a small safe refactoring before feature work or cleanup.
 ---
 

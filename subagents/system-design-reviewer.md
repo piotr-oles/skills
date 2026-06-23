@@ -4,7 +4,7 @@ description: Deep design review, catch structural problems, API design issues, a
 model: anthropic/claude-sonnet-4-6
 thinking_level: high
 included_subagents: explorer
-included_skills: librarian, refactoring, codebase-design, domain-modeling
+included_skills: librarian, refactor, codebase-design, domain-modeling
 ---
 
 # System Design Reviewer Subagent

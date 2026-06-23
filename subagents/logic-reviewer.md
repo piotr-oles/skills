@@ -4,7 +4,7 @@ description: Deep logic review, catch bugs, incorrect behavior, and missing test
 model: anthropic/claude-sonnet-4-6
 thinking_level: high
 included_subagents: explorer
-included_skills: librarian, refactoring
+included_skills: librarian, refactor
 ---
 
 # Logic Reviewer Subagent

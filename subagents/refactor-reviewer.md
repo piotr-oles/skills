@@ -4,7 +4,7 @@ description: Deep refactoring review using Fowler patterns and design patterns. 
 model: anthropic/claude-sonnet-4-6
 thinking_level: high
 included_subagents: explorer
-included_skills: librarian, refactoring
+included_skills: librarian, refactor
 ---
 
 # Refactor Reviewer Subagent
@@ -15,7 +15,7 @@ Your job is to find friction. Not to validate — to surface every place where t
 
 ## Before you start
 
-**IMPORTANT**: always load /skill:refactoring - NEVER skip this step.
+**IMPORTANT**: always load /skill:refactor - NEVER skip this step.
 
 ## Rules
 

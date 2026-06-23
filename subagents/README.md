@@ -12,3 +12,4 @@ Powered by the [`@piotr-oles/pi-subagents`](https://github.com/piotr-oles/pi-ext
 - **[system-design-reviewer](./system-design-reviewer.md)** — Catches structural problems, API design issues, and maintainability risks.
 - **[refactor-reviewer](./refactor-reviewer.md)** — Finds code smells, maps them to Fowler patterns, prioritizes by friction.
 - **[project-manager](./project-manager.md)** — Turns feature requests and bug reports into high-level tickets from a user/product perspective.
+- **[kanban-worker](./kanban-worker.md)** — Autonomous kanban board worker. Picks tasks, implements them, merges to main, marks done. Parallel-safe via claim mechanic.

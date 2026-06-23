@@ -1,5 +1,7 @@
 Subagents live in `subagents/`. Each `.md` file defines one subagent — its model, tools, included skills, and system prompt.
 
+Run `./install.sh` to symlink skills and subagents into the agent lookup paths. Pass `--force` to replace existing real dirs/files. Entries not in this repo are reported as `external` and left untouched.
+
 Skills are organized into bucket folders under `skills/`:
 
 - `engineering/` — daily code work
