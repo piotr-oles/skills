@@ -28,6 +28,7 @@ Reachable only when you type them (`disable-model-invocation: true`).
 
 Model- or user-reachable.
 
+- **[address-pr](./skills/engineering/address-pr/SKILL.md)** — Fetch PR inline comments, reviews, and issue comments; address each one; commit and push.
 - **[refactor](./skills/engineering/refactor/SKILL.md)** — Spot refactoring opportunities, map code smells to Fowler patterns, choose safe refactoring before feature work or cleanup.
 - **[agent-browser](./skills/engineering/agent-browser/SKILL.md)** — Browser automation via CDP: accessibility-tree snapshots, auth state, multi-tab, React introspection.
 - **[tdd](./skills/engineering/tdd/SKILL.md)** — Test-driven development with red-green-refactor loop, one vertical slice at a time.
