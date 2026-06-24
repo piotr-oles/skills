@@ -8,7 +8,7 @@ done
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-SKILLS_SRC="$REPO_DIR/skills/engineering"
+SKILLS_BUCKETS=("$REPO_DIR/skills/engineering" "$REPO_DIR/skills/productivity" "$REPO_DIR/skills/misc")
 SKILLS_DST="$HOME/.agents/skills"
 
 SUBAGENTS_SRC="$REPO_DIR/subagents"
@@ -43,15 +43,21 @@ link() {
   fi
 }
 
-echo "==> skills: $(pretty "$SKILLS_SRC") -> $(pretty "$SKILLS_DST")"
+echo "==> skills -> $(pretty "$SKILLS_DST")"
 mkdir -p "$SKILLS_DST"
-for src in "$SKILLS_SRC"/*/; do
-  name="$(basename "$src")"
-  link "$src" "$SKILLS_DST/$name"
+declare -A REPO_SKILLS
+for bucket in "${SKILLS_BUCKETS[@]}"; do
+  [[ -d "$bucket" ]] || continue
+  for src in "$bucket"/*/; do
+    [[ -d "$src" ]] || continue
+    name="$(basename "$src")"
+    REPO_SKILLS["$name"]=1
+    link "$src" "$SKILLS_DST/$name"
+  done
 done
 while IFS= read -r entry; do
   name="$(basename "$entry")"
-  [[ -d "$SKILLS_SRC/$name" ]] && continue
+  [[ -n "${REPO_SKILLS[$name]+set}" ]] && continue
   echo "  external  $name"
 done < <(find "$SKILLS_DST" -maxdepth 1 -mindepth 1 -type d 2>/dev/null || true)
 
