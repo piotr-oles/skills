@@ -4,7 +4,6 @@ description: Use when reviewing or changing code to spot refactoring opportuniti
 ---
 
 # Refactoring
-
 ## How to Choose
 
 - Start from the concrete trigger in the code, not from a preferred pattern name.
@@ -123,7 +122,6 @@ Introduce these patterns when structural problems recur. Each addresses a specif
 - [Iterator and Async Iterator](#iterator-and-async-iterator)
 
 # Extract Composed Capability
-
 Optional behavior should not force every object in a hierarchy or interface to carry methods it cannot honestly support. Extract the capability into a small component and compose it only into objects that have that capability.
 
 ## Use When
@@ -180,7 +178,6 @@ class Account {
 ---
 
 # Extract Role Interface
-
 Consumers should depend on the role they need, not on a concrete class or broad service. Extract a small consumer-owned interface so the dependency expresses one collaboration and can be composed, tested, or replaced independently.
 
 ## Use When
@@ -238,7 +235,6 @@ function renderInvoice(accounts: AccountReader, accountId: string) {
 ---
 
 # Introduce Port Adapter
-
 Concrete infrastructure and third-party APIs should not leak through core code. Introduce a small port owned by the caller and an adapter that translates between the port and the external API.
 
 ## Use When
@@ -294,7 +290,6 @@ async function invoiceCustomer(payments: PaymentPort, customerId: string, amount
 ---
 
 # Replace Conditional with Strategy
-
 Conditionals that choose among interchangeable behaviors often want composition before inheritance. Move each behavior behind a strategy interface so callers can select, inject, or test the variation without growing a class hierarchy.
 
 ## Use When
@@ -353,7 +348,6 @@ class ExpressShipping implements ShippingStrategy {
 ---
 
 # Replace Inheritance with Composition
-
 Inheritance is the wrong tool when a subclass mainly borrows implementation, overrides behavior to block inherited features, or needs to combine multiple variation axes. Replace inheritance with an owned collaborator so the object keeps the behavior it needs without exposing or depending on the whole superclass API.
 
 ## Use When
@@ -409,7 +403,6 @@ class CsvReport {
 ---
 
 # Replace Singleton with Injected Dependency
-
 Singletons and global service locators hide dependencies and make tests share state. Pass the dependency explicitly so each caller can compose the implementation it needs.
 
 ## Use When
@@ -465,7 +458,6 @@ function auditLogin(logger: Logger, userId: string) {
 ---
 
 # Split Interface with Composition
-
 A large interface forces implementers and consumers to depend on methods they do not use. Split it into small role interfaces, then compose objects from the roles each workflow actually needs.
 
 ## Use When
@@ -523,22 +515,6 @@ interface PasswordResetSender {
 ---
 
 # CHANGE FUNCTION DECLARATION
-Change Function Declaration changes function name, parameters, or full signature. Use when current declaration misstates intent, limits reuse, or creates needless coupling.
-
-## Use When
-
-- Function name no longer says what callers need to know.
-- Parameter list gives wrong context or couples caller to wrong object.
-- Parameter should become one of its properties, or property should become whole object.
-- Published API needs staged migration.
-
-## Simple Mechanics
-
-- If removing parameter, ensure body no longer references it.
-- Change declaration.
-- Update all references.
-- Prefer separate steps for rename, add parameter, remove parameter, or larger signature change.
-
 ## Notes
 
 - Use simple mechanics when declaration and callers can change together safely.
@@ -569,21 +545,10 @@ function circumference(radius) {
 ---
 
 # COMBINE FUNCTIONS INTO CLASS
-Move related functions and shared data into one class when they operate as one concept. Class makes common environment explicit, removes repeated arguments, and keeps derived values consistent when data can mutate.
-
-## Use When
-
-- Several functions take same record or parameter group.
-- Calculations duplicate around same data.
-- Clients need more than one related operation exposed.
-- Source data may change after creation and derived values must stay current.
-- Nested functions would hide behavior from tests or collaborators.
-
 ## Notes
 
 - Alternative: Combine Functions into Transform.
 - Prefer class over transform when core data can mutate; methods recalculate from current state.
-- Transform fits immutable/read-only pipelines better.
 - Uniform Access Principle: client need not know whether `baseCharge` is stored field or derived getter.
 - TypeScript alternative: a plain module exporting functions over a `readonly` data type is idiomatic and testable without a class; use a class when private mutable state or encapsulated invariants are needed.
 
@@ -611,20 +576,9 @@ const taxableCharge = aReading.taxableCharge;
 ---
 
 # EXTRACT FUNCTION
-Extract Function moves coherent code fragment into named function. Use when name reveals intent better than inline implementation.
-
-## Use When
-
-- Reader must inspect fragment to learn what it does.
-- Comment explains intent; turn comment into function name.
-- Same or similar code appears elsewhere; pair later with Replace Inline Code with Function Call.
-- Short function still useful when name carries intent.
-
 ## Notes
 
-- Inverse: [Inline Function](#inline-function).
 - If no better name exists, do not extract.
-- Nested functions reduce scope problems, but sibling/top-level extraction exposes variable pain earlier.
 
 ## Example
 
@@ -653,19 +607,8 @@ function printBanner() {
 ---
 
 # INLINE FUNCTION
-Inline Function replaces function call with function body. Use when body communicates as well as name, or indirection hides useful structure.
-
-## Use When
-
-- Function name adds no meaning beyond implementation.
-- Delegation chain creates noise.
-- Badly factored functions need flattening before better extraction.
-- Small body can fit caller with little adjustment.
-
 ## Notes
 
-- Inverse: [Extract Function](#extract-function).
-- Inlining can proceed one caller or one statement at time.
 - For awkward bodies, use Move Statements to Callers first.
 - Recursion, multiple returns, inaccessible object state, or heavy fitting usually mean choose different refactoring.
 
@@ -695,19 +638,9 @@ function rating(aDriver) {
 ---
 
 # INTRODUCE PARAMETER OBJECT
-Replace repeated parameter clumps with one object that names relationship between values. This shrinks signatures now and creates place for behavior later.
-
-## Use When
-
-- Same values travel together through many functions.
-- Parameter lists repeat min/max, start/end, date range, options, or other data clumps.
-- Callers already pull values as pair/group from another object.
-- You want common behavior over that group to become explicit.
-
 ## Notes
 
 - After object exists, move common behavior into it, such as `contains` on range object.
-- Watch for nearby equivalent clumps with different names, such as `temperatureFloor`/`temperatureCeiling` versus `min`/`max`.
 - Add value-based equality when object should behave as true value object.
 
 ## Example
@@ -732,16 +665,7 @@ function readingsOutsideRange(station, range) { ... }
 ---
 
 # SPLIT PHASE
-Split Phase separates mixed logic into sequential stages with explicit handoff data. Use when stages use different data, functions, or change reasons.
-
-## Use When
-- One fragment handles two topics in sequence.
-- Input shape differs from model needed by main logic.
-- Later changes likely hit one stage, not whole algorithm.
-- Compiler-style pipeline fits: tokenize, parse, transform, generate.
-
 ## Notes
-- Best clue: stages use different data/functions.
 - Handoff structure names phase boundary; keep it small and meaningful.
 - Leave params that truly belong only to second phase, such as external strategy/config input.
 
@@ -772,14 +696,6 @@ function priceOrder(product, quantity, shippingMethod) {
 ---
 
 # ENCAPSULATE RECORD
-Encapsulate Record controls access to a record whose shape, field names, or mutation should not leak freely. In TypeScript, prefer a typed interface with `readonly` fields for immutable data; use a class with private fields when you need validation, change notification, or mutation control.
-
-## Use When
-- Raw object shape spreads across modules and callers depend on field names directly.
-- Field names need rename, validation, or derived values.
-- Mutable record references leak across module boundaries.
-- JSON/API-style nested data receives direct reads and writes in multiple places.
-
 ## Example
 
 For **immutable data** — define a typed interface or type alias; callers read fields directly:
@@ -821,21 +737,9 @@ For **nested structures**, define nested interfaces and migrate update paths fir
 ---
 
 # EXTRACT CLASS
-Extract Class splits bloated class by moving cohesive data and behavior into new class. Use when responsibilities, change rhythms, or subtype axes show one class hiding multiple concepts.
-
-## Use When
-
-- Fields and methods form separate cluster.
-- Data changes together or depends tightly on other data.
-- Removing one field/function would make small method group nonsense.
-- Subclasses affect only part of class, or different features need different subtype axes.
-
 ## Notes
 
 - Inverse: Inline Class.
-- Inline Class folds weak source class into target when source no longer carries enough responsibility.
-- Inline Class mechanics: add target delegators for source public functions, redirect clients, move data/functions, test each move, delete empty source.
-- Reorganization tactic: Inline Class can collapse two awkward classes first, then Extract Class can split better boundary.
 
 ## Example
 
@@ -867,20 +771,9 @@ class Person {
 ---
 
 # REPLACE PRIMITIVE WITH OBJECT
-Replace Primitive with Object wraps simple value in class that can hold behavior. Formerly Replace Data Value with Object and Replace Type Code with Class; use when string/number logic spreads across code.
-
-## Use When
-- Primitive now needs formatting, parsing, validation, comparison, or domain rules.
-- Same checks or conversions duplicate around codebase.
-- Type code wants named behavior but full hierarchy unnecessary.
-- Future behavior belongs with value, not callers.
-
 ## Notes
 - Keep wrapper humble first; move behavior in after tests protect callers.
 - If a type code has case-specific payload fields, prefer [Replace Enum Plus Payload Fields with Variant Union](#replace-enum-plus-payload-fields-with-variant-union).
-- Constructor can accept existing `Priority` to ease migration.
-- For value object role, make immutable and implement equality.
-- Good follow-on methods: validation, `equals`, `higherThan`, `lowerThan`.
 - TypeScript alternative: branded types (`type UserId = string & { readonly _brand: "UserId" }`) provide nominal type safety without a class wrapper; prefer them for pure identity/nominal typing. Use a class when the value needs methods such as `equals()`, `format()`, `higherThan()`, or domain validation.
 
 ## Example
@@ -902,19 +795,9 @@ orders.filter(o => o.priority.higherThan(new Priority("normal")));
 ---
 
 # SUBSTITUTE ALGORITHM
-Substitute Algorithm replaces hard-to-follow logic with clearer equivalent algorithm. Use after behavior is understood and candidate replacement can be checked against old output.
-
-## Use When
-
-- Simpler algorithm found.
-- Library now covers custom code.
-- Planned behavior change becomes easier after replacing algorithm.
-- Existing function can be isolated and tested.
-
 ## Notes
 
 - Decompose large algorithm first; whole-function replacement is hard while code remains tangled.
-- Strong tests matter more here than small-step mechanics.
 
 ## Example
 
@@ -945,20 +828,11 @@ function foundPerson(people) {
 ---
 
 # MOVE FIELD
-Move Field relocates data from source record or class to better target record or class without changing observable behavior. Use it when current data home forces repeated passing, duplicate updates, or hides domain relationship.
-
-## Use When
-- Field travels with another record whenever passed to functions.
-- Change in one structure forces related field change in another structure.
-- Same fact gets stored or updated in multiple places.
-- Broader refactoring shows users should read data from target object instead of source.
-
 ## Notes
 - Bare records need accessor functions and careful migration; prefer [Encapsulate Record](#encapsulate-record) first when possible.
 - Immutable moved field can support duplicate writes while reads migrate.
 - Shared target changes semantics unless all source objects already agree on value; verify with data checks, logging, or [Introduce Assertion](#introduce-assertion).
 - If constructor or statement order blocks target access, use Slide Statements.
-- Move often happens inside larger change; move field first, then migrate clients to target object.
 
 ## Example
 
@@ -992,22 +866,9 @@ class Customer {
 ---
 
 # MOVE FUNCTION
-Move Function puts function in context where its data, callees, callers, and future use belong. Use when current module/class/function no longer gives clearest ownership or access.
-
-## Use When
-
-- Function references other context more than current one.
-- Callers live near target context, or next feature needs target access.
-- Nested helper has independent value.
-- Method fits another class/module better.
-- Moving cluster may reveal need for [Combine Functions into Class](#combine-functions-into-class) or [Extract Class](#extract-class).
-
 ## Notes
 
-- Source delegator can stay for compatibility. Remove it when callers can reach target directly.
 - Moving nested functions: pass captured data as parameters or move dependent helpers too.
-- In JavaScript, prefer modules for visibility; nested functions can hide data dependencies.
-- Moving between classes: pass simple values when enough; pass source object when target needs several values or future variation belongs there.
 
 ## Example
 
@@ -1036,18 +897,9 @@ function distance(p1, p2) { ... }
 ---
 
 # REPLACE LOOP WITH PIPELINE
-Collection pipeline expresses collection processing as ordered operations such as `map`, `filter`, and `slice`. Replace loop when data flow reads clearer top to bottom than control flow inside loop.
-
-## Use When
-
-- Loop transforms, filters, skips, or accumulates collection data.
-- Each loop step maps cleanly to pipeline operation.
-- You want to remove control variables and make object flow explicit.
-
 ## Notes
 
 - Keep intermediate collection variable when it explains source data.
-- Rename lambda variables after behavior is safely moved.
 - For more examples, see "Refactoring with Loops and Collection Pipelines".
 
 ## Example
@@ -1082,14 +934,6 @@ return input
 ---
 
 # SPLIT LOOP
-One loop doing multiple jobs forces every change to understand every job. Split loop gives each behavior its own pass, then often enables [Extract Function](#extract-function), [Replace Loop with Pipeline](#replace-loop-with-pipeline), or [Substitute Algorithm](#substitute-algorithm).
-
-## Use When
-
-- Loop calculates or mutates more than one independent result.
-- Combined loop exists only to avoid extra traversal.
-- You want each calculation to return its own value instead of sharing locals or result structures.
-
 ## Notes
 
 - Extra traversal is usually not real bottleneck; refactor for clarity first, optimize after measuring.
@@ -1123,19 +967,6 @@ for (const p of people) if (p.age < youngest) youngest = p.age;
 ---
 
 # CHANGE REFERENCE TO VALUE
-Replace shared reference object with immutable value object copied or reassigned as whole. Use when identity does not matter and updates should not leak across owners.
-
-## Use When
-- Inner object belongs to one owner or can be duplicated safely.
-- You want immutable data, simpler reasoning, safer distribution or concurrency.
-- Updating one holder should not update other holders.
-- Candidate class can become immutable.
-
-## Notes
-- Inverse: [Change Value to Reference](#change-value-to-reference).
-- Do not use when several objects must share one object and see same mutation.
-- Value Object often final shape.
-
 ## Example
 
 Replace mutable reference object with immutable value object.
@@ -1156,19 +987,7 @@ aPerson.telephoneNumber = new TelephoneNumber("312", "5550142");
 ---
 
 # CHANGE VALUE TO REFERENCE
-Replace duplicated value objects with one shared reference from repository. Use when copied records represent same entity and mutation must be visible everywhere.
-
-## Use When
-- Multiple host records carry copies of same logical entity.
-- Entity data can change or be enriched after load.
-- Duplicate objects risk inconsistent state.
-- One identity per entity is clearer than many equal copies.
-
 ## Notes
-- Inverse: [Change Reference to Value](#change-reference-to-value).
-- Immutable and never-updated data may stay as value.
-- Missing ID in preloaded repository should usually be error.
-- Global repository couples constructors to global state; pass repository as parameter when that coupling matters.
 - In TypeScript, prefer a reactive store, DI container, or event-based update over a global mutable registry; the registry approach hides coupling and complicates testing.
 
 ## Example
@@ -1200,17 +1019,6 @@ class Order {
 ---
 
 # REPLACE DERIVED VARIABLE WITH QUERY
-Replace stored derived data with query that calculates same value from source data. Remove duplicated mutable state; source changes then cannot desync cached result.
-
-## Use When
-- Variable repeats value already derivable from other fields.
-- Accumulator or cache adds update burden without proven performance need.
-- Source data changes over time, and derived structure lifetime is hard to manage.
-
-## Notes
-- Immutable source data can justify keeping transformed derived data.
-- Transient derived data can be fine either as query or transformation.
-
 ## Example
 
 Calculate production from adjustments instead of storing derived copy.
@@ -1250,18 +1058,9 @@ class ProductionPlan {
 ---
 
 # SPLIT VARIABLE
-Formerly: Remove Assignments to Parameters; formerly: Split Temp. Variable assigned for multiple responsibilities hides meaning; split into one variable per responsibility.
-
-## Use When
-
-- Variable holds one meaning, then later reused for different meaning.
-- Input parameter is overwritten to hold result.
-- Temp should be assigned once but receives multiple independent assignments.
-
 ## Notes
 
 - Do not split collecting variables such as sums, string concatenation, stream writes, or collection additions.
-- Assignment like `i = i + something` usually signals collecting variable, not split candidate.
 - For overwritten parameter, keep original parameter as input, create separate result variable, then use Rename Variable for clearer names.
 
 ## Example
@@ -1289,21 +1088,10 @@ const secondaryAcceleration = (scenario.primaryForce + scenario.secondaryForce) 
 ---
 
 # PRESERVE WHOLE OBJECT
-Caller extracts several values from object then passes pieces. Pass whole object so callee derives needed values and parameter list shrinks.
-
-## Use When
-
-- Same source object supplies several arguments.
-- Called function may need more values from same object later.
-- Several callers duplicate extraction or manipulation logic.
-- [Introduce Parameter Object](#introduce-parameter-object) created new whole object and old data clump still leaks through callers.
-
 ## Notes
 
 - Avoid when callee should not depend on whole object, especially across module boundary.
 - Repeated use of object parts may signal Feature Envy; moving behavior to whole object may be stronger.
-- Same pattern applies when object passes several own fields; pass `this`.
-- Same subset used everywhere may point to [Extract Class](#extract-class).
 
 ## Example
 
@@ -1326,14 +1114,6 @@ if (!aPlan.withinRange(aRoom.daysTempRange)) alerts.push("room temperature went 
 ---
 
 # REMOVE FLAG ARGUMENT
-Literal flag parameter selects branch inside callee. Replace literal calls with explicit functions so call site states intent.
-
-## Use When
-
-- Callers pass literal boolean, enum, string, or symbol to choose behavior.
-- Boolean `true`/`false` hides meaning at call site.
-- Separate behaviors deserve separate API entries and clearer tooling visibility.
-
 ## Notes
 
 - Not flag when value flows as data, such as `isRush = determineIfRush(anOrder)` then `deliveryDate(anOrder, isRush)`.
@@ -1363,20 +1143,6 @@ function regularDeliveryDate(anOrder) {return deliveryDate(anOrder, false);}
 ---
 
 # REPLACE CONSTRUCTOR WITH FACTORY FUNCTION
-Replace constructor calls with factory function when constructor rules constrain naming, return type, invocation, or substitution. Factory may call constructor internally, but callers gain normal function interface and room for subclass, proxy, or named variant.
-
-## Use When
-
-- Constructor name hides intent.
-- Constructor must return same class, but caller should receive subclass, proxy, cached object, or environment-specific object.
-- Call sites need normal function value instead of special syntax such as `new`.
-- Literal type codes at call sites need named creation functions.
-
-## Notes
-
-- Factory keeps creation policy outside callers.
-- Constructor can stay as implementation detail.
-
 ## Example
 
 Replace type-code constructor call with factory.
@@ -1400,21 +1166,6 @@ function createEngineer(name) {
 ---
 
 # REPLACE PARAMETER WITH QUERY
-Parameter duplicates value callee can derive from existing context. Remove parameter and let function query value itself when dependency belongs there.
-
-## Use When
-
-- Callee can determine parameter just as easily as caller.
-- Parameter comes from querying another parameter or receiver.
-- Recent refactoring left parameter redundant.
-
-## Notes
-
-- Inverse: [Replace Query with Parameter](#replace-query-with-parameter).
-- Avoid when query adds unwanted dependency to function body.
-- Preserve referential transparency; do not replace parameter with mutable global access.
-- Bias: simplify callers only when responsibility fits callee.
-
 ## Example
 
 Let receiver query discount level itself.
@@ -1437,21 +1188,11 @@ get discountLevel() {return this.quantity > 100 ? 2 : 1;}
 ---
 
 # REPLACE QUERY WITH PARAMETER
-Function reads value from surrounding scope or global dependency. Pass value as parameter to reduce coupling and make function easier to reason about.
-
-## Use When
-
-- Function depends on global, module, or receiver query you want to remove.
-- Pure or referentially transparent core should be wrapped by I/O or mutable shell.
-- Dependency direction should move from callee to caller.
-
 ## Notes
 
-- Inverse: [Replace Parameter with Query](#replace-parameter-with-query).
 - Tradeoff: caller must supply value, so call sites can become noisier.
 - If the query reaches into singleton or process-wide state, consider [Replace Singleton with Injected Dependency](#replace-singleton-with-injected-dependency).
 - Good for immutable or pure modules; repeated same parameter may signal excessive interface burden.
-- Decision is responsibility allocation; use inverse when dependency belongs inside callee.
 
 ## Example
 
@@ -1482,16 +1223,7 @@ class HeatingPlan {
 ---
 
 # DECOMPOSE CONDITIONAL
-Split complex conditional into named condition and named branch actions. Names expose why branch exists, not just what code does.
-
-## Use When
-- Conditional logic grows long or dense.
-- Boolean expression hides business rule.
-- Then or else leg hides intent behind calculation details.
-- Branch names would make caller read like domain language.
-
 ## Notes
-- Pattern is special case of [Extract Function](#extract-function).
 - Name condition for question being asked, not operators used.
 - Name branch functions for outcome or policy.
 - Leave tiny obvious conditionals alone if extraction only adds noise.
@@ -1521,19 +1253,6 @@ function regularCharge() {return quantity * plan.regularRate + plan.regularServi
 ---
 
 # INTRODUCE ASSERTION
-Add assertion where code assumes condition must already be true. Use assertion to document programmer invariant, not to validate normal external input.
-
-## Use When
-
-- Algorithm depends on invariant hidden in code or comment.
-- Failure means programmer error.
-- Assertion clarifies required state at point of execution.
-- Setter, constructor, or trusted boundary can catch invalid object state closer to source.
-
-## Notes
-
-- Do not use assertions for expected user, data, or service validation unless source is trusted and failure means bug.
-
 ## Example
 
 Assert discount rate invariant where value enters object.
@@ -1562,22 +1281,11 @@ class Customer {
 ---
 
 # INTRODUCE SPECIAL CASE
-Create special-case object for common response to null, `"unknown"`, or another sentinel value. Move default values and no-op behavior into that object so clients stop repeating checks.
-
-## Use When
-
-- Many clients compare same property or value and mostly do same fallback.
-- Null object, `"unknown"` customer, empty record, or missing relationship has standard behavior.
-- Client conditionals repeat name, plan, payment, status, or nested default values.
-- Read-only data can use literal object; behavior or writes usually need class.
-
 ## Notes
 
 - If absence should be part of a finite state model, prefer a domain-specific variant union over a broad optional record.
 - Special-case objects should be immutable value objects; setters usually no-op when substitute must accept writes.
 - If special case returns related object, return another special case such as `NullPaymentHistory`.
-- Keep explicit check only for exceptional clients needing different behavior.
-- Literal object works for read-only data; freeze if possible, but class usually clearer.
 
 ## Example
 
@@ -1605,21 +1313,6 @@ class UnknownCustomer {
 ---
 
 # REPLACE NESTED CONDITIONAL WITH GUARD CLAUSES
-Use guard clauses for exceptional branches so main path stays flat. Keep `if/else` for equal normal paths; return early when branch means stop.
-
-## Use When
-
-- Nested conditionals hide core behavior.
-- One branch handles separated, retired, invalid, error, empty, or other edge case.
-- Reversing condition makes normal path read straight.
-- Multiple guards return same result; then use Consolidate Conditional Expression.
-
-## Notes
-
-- One exit point not goal; clarity is goal.
-- Use normal conditionals when both branches have equal weight.
-- Guard clause says: not main case, handle and leave.
-
 ## Example
 
 Replace nested special cases with guard clauses.
@@ -1649,7 +1342,6 @@ function payAmount(employee) {
 ---
 
 # Add Exhaustive Match
-
 Union types only pay off when consumers handle every variant deliberately. Replace loose conditionals or default fallthrough with exhaustive matching so new variants produce compile-time or test-time failures.
 
 ## Use When
@@ -1707,7 +1399,6 @@ function label(state: RequestState) {
 ---
 
 # Replace Boolean Flags with State Union
-
 Several boolean fields often encode a state machine badly. Replace the flag matrix with a union of named states so invalid flag combinations cannot be represented.
 
 ## Use When
@@ -1764,7 +1455,6 @@ type SaveState =
 ---
 
 # Replace Enum Plus Payload Fields with Variant Union
-
 An enum or type-code field plus a pile of optional payload fields is a union trying to get out. Move payload fields onto the enum variants that actually own them.
 
 ## Use When
@@ -1818,7 +1508,6 @@ type Payment =
 ---
 
 # Replace Optional Fields with Variant Union
-
 A record with many optional fields often represents several different shapes hidden inside one type. Replace it with a tagged union so each variant carries only the fields that are valid for that case.
 
 ## Use When
@@ -1874,7 +1563,6 @@ type RequestState =
 ---
 
 # Replace Subclasses with Union Variants
-
 Some class hierarchies are only data variants with little or no behavior. Replace them with union variants when exhaustive handling and plain data are clearer than inheritance.
 
 ## Use When
@@ -1925,7 +1613,6 @@ type Shape =
 ---
 
 # Builder
-
 Complex construction should not be the caller's responsibility. Extract the construction sequence into a builder that accumulates configuration and returns a finished, validated object.
 
 ## Use When
@@ -1987,7 +1674,6 @@ function createQuery(opts: { table: string; where?: string[]; limit?: number }):
 ---
 
 # Facade
-
 A complex subsystem should expose a simple surface for common use cases. Introduce a facade that orchestrates the subsystem and hides its internal structure from callers.
 
 ## Use When
@@ -2052,7 +1738,6 @@ export class ReportFacade {
 ---
 
 # Decorator
-
 Cross-cutting behavior should wrap an existing object or function rather than be mixed into it. A decorator implements the same interface as the wrapped subject and delegates to it, adding behavior before or after without changing the subject.
 
 ## Use When
@@ -2127,7 +1812,6 @@ const fetch = withLogging(withRetry(withCache(fetchUser)));
 ---
 
 # Observer
-
 A component that changes state should not need to know what reacts to it. Let dependents subscribe to events so the producer stays decoupled from its consumers.
 
 ## Use When
@@ -2205,7 +1889,6 @@ Use **signals or RxJS** when observers need computed derivations, async streams,
 ---
 
 # Chain of Responsibility
-
 When processing a request through multiple potential handlers, do not hard-code the sequence. Arrange handlers so each decides to handle or pass on the request, making the chain composable and variable.
 
 ## Use When
@@ -2272,7 +1955,6 @@ function runHandlers<T, R>(req: T, handlers: readonly Handler<T, R>[]): R | null
 ---
 
 # Memento
-
 State that must be restored should be captured outside the object. Take immutable snapshots at meaningful points so the originator can roll back without exposing its internal structure.
 
 ## Use When
@@ -2337,7 +2019,6 @@ class History {
 ---
 
 # Iterator and Async Iterator
-
 Producing all values upfront couples the producer to memory and forces consumers to wait. Use generator functions to produce values lazily; use async generators for I/O-bound sequences so consumers pull one value at a time.
 
 ## Use When
