@@ -5,8 +5,6 @@ description: Use when reviewing or changing code to spot refactoring opportuniti
 
 # Refactoring
 
-Use this skill when code is hard to change, names hide intent, duplication appears, data leaks across module boundaries, conditionals sprawl, APIs feel awkward, optional fields encode state, or inheritance creates coupling. Preserve behavior with tests first, prefer composition over inheritance when both fit, use unions/enums to make invalid states unrepresentable, choose the smallest pattern that removes the current friction, and follow the linked pattern file for mechanics and examples.
-
 ## How to Choose
 
 - Start from the concrete trigger in the code, not from a preferred pattern name.
@@ -14,7 +12,6 @@ Use this skill when code is hard to change, names hide intent, duplication appea
 - Prefer composition over inheritance for behavior reuse, runtime variation, optional capabilities, and independent change axes; reserve inheritance for stable, honest subtype relationships.
 - Prefer discriminated unions, Rust enums, or enum-like ADTs for finite variants, lifecycle phases, expected absence/failure, and records with many optional fields.
 - Use unions for closed sets of data shapes; use strategies, ports, or composition when behavior must stay open-ended or runtime-pluggable.
-- Opposite pairs are context decisions, not contradictions; choose between them by looking at complexity, caller context, and API stability.
 - If several patterns fit, use the one that enables the next safe step: name things, isolate data, move behavior, simplify branching, then reshape APIs or inheritance.
 
 ## Safety Workflow
@@ -61,153 +58,69 @@ Use this skill when code is hard to change, names hide intent, duplication appea
 
 ## Core Building Blocks
 
-### [Extract Function](#extract-function)
-Use when a block of code has a purpose that is clearer than its mechanics, or when the same fragment appears in more than one place. Trigger: comments explaining a block, long functions with visible sections, repeated code, or code that needs a name before it can move.
-
-### [Inline Function](#inline-function)
-Use when a function's body is clearer than its name, or when indirection prevents a useful follow-up refactoring. Trigger: pass-through wrappers, one-line delegators, helpers whose name does not add meaning, or call graphs that are harder to read than the code.
-
-### [Change Function Declaration](#change-function-declaration)
-Use when a function's name, parameters, or return shape no longer match what callers need to know. Trigger: misleading names, unused parameters, repeated caller-side preparation, parameters that should be grouped, or a function whose public contract is fighting the design.
-
-### [Introduce Parameter Object](#introduce-parameter-object)
-Use when the same group of values travels together and represents one concept. Trigger: repeated parameter clusters such as start/end, min/max, date ranges, options groups, or functions that all pass the same related values onward.
-
-### [Combine Functions Into Class](#combine-functions-into-class)
-Use when several functions operate on the same data and would be clearer with shared state, derived values, and behavior in one home. Trigger: the same record passed into many helpers, duplicated calculations around that data, or helper sets that change together. TypeScript alternative: a module with exported functions over a shared `readonly` data type is equally valid and often simpler — prefer a class only when you need private mutable state, encapsulated invariants, or `this`-based shared access.
-
-### [Split Phase](#split-phase)
-Use when one routine mixes two distinct jobs, such as parsing then processing, choosing then executing, or preparing data then rendering output. Trigger: variables that belong only to an early or late stage, code that would be easier with an intermediate object, or changes that affect only half the function.
-
+- [Extract Function](#extract-function)
+- [Inline Function](#inline-function)
+- [Change Function Declaration](#change-function-declaration)
+- [Introduce Parameter Object](#introduce-parameter-object)
+- [Combine Functions Into Class](#combine-functions-into-class)
+- [Split Phase](#split-phase)
 ## Encapsulation
 
-### [Encapsulate Record](#encapsulate-record)
-Use when raw record access spreads field-name knowledge across modules. In TypeScript: typed interface + `readonly` for immutable data; class with `#private` fields for mutation control. Trigger: string-keyed access, repeated defensive checks, nested data navigation, or a need to rename or validate fields safely.
-
-### [Replace Primitive With Object](#replace-primitive-with-object)
-Use when a primitive value has rules, formatting, validation, or behavior that deserves a named type. Trigger: repeated checks around strings or numbers, primitive obsession, type codes with behavior, or call sites that need to know too much about a value. TypeScript alternative: branded types (`type UserId = string & { readonly _brand: "UserId" }`) give nominal safety without a class; use a class only when methods like `equals()`, `format()`, or domain validation belong with the value.
-
-### [Extract Class](#extract-class)
-Use when one class or module has two responsibilities that change for different reasons. Trigger: clusters of fields and methods that use each other more than the rest of the class, names that point to a hidden concept, or constructors with unrelated data groups.
-
-### [Substitute Algorithm](#substitute-algorithm)
-Use when an algorithm can be replaced by a clearer or more reliable implementation without changing behavior. Trigger: hard-to-follow loops, overgrown special handling, library functionality that now covers the case, or tests that define the result better than the current steps.
-
+- [Encapsulate Record](#encapsulate-record)
+- [Replace Primitive With Object](#replace-primitive-with-object)
+- [Extract Class](#extract-class)
+- [Substitute Algorithm](#substitute-algorithm)
 ## Moving Features
 
-### [Move Function](#move-function)
-Use when a function uses data or helpers from another module/class more than from its current home. Trigger: feature envy, repeated parameter passing to reach the real data owner, or a function that changes with another module's responsibilities.
-
-### [Move Field](#move-field)
-Use when data lives on the wrong object and causes awkward synchronization or navigation. Trigger: a field mostly read with another object's behavior, duplicated copies of the same value, or invariants that belong to a different owner.
-
-### [Split Loop](#split-loop)
-Use when one loop performs multiple independent jobs and each job would be clearer alone. Trigger: several accumulators, unrelated side effects in one iteration, or changes that affect only one of the loop's responsibilities.
-
+- [Move Function](#move-function)
+- [Move Field](#move-field)
+- [Split Loop](#split-loop)
 ## Organizing Data
 
-### [Split Variable](#split-variable)
-Use when one variable is assigned different meanings over time. Trigger: reassignment for unrelated purposes, accumulator variables mixed with temporary result variables, or parameters overwritten for convenience.
-
-### [Replace Derived Variable With Query](#replace-derived-variable-with-query)
-Use when a stored value can be calculated from authoritative data and risks going stale. Trigger: cached totals, flags, or summaries updated in several places, synchronization bugs, or invariants that tests must repeatedly defend.
-
-### [Change Reference To Value](#change-reference-to-value)
-Use when an object is best treated as immutable data and identity does not matter. Trigger: small objects shared only for their fields, equality based on contents, update bugs from aliasing, or code that would simplify by replacing whole values.
-
-### [Change Value To Reference](#change-value-to-reference)
-Use when multiple copies of the same entity must stay in sync and identity matters more than immutability. Trigger: duplicated customer/product/account objects, updates that must be seen everywhere, or bugs from separate copies drifting apart. In TypeScript, prefer a reactive store (Zustand, Redux, signals) or dependency injection over a global mutable repository; the registry approach creates hidden coupling and makes testing harder.
-
+- [Split Variable](#split-variable)
+- [Replace Derived Variable With Query](#replace-derived-variable-with-query)
+- [Change Reference To Value](#change-reference-to-value)
+- [Change Value To Reference](#change-value-to-reference)
 ## Unions and Enums
 
 Prefer these when a finite set of valid shapes is currently represented by optional fields, booleans, type codes, nullable values, or data-only subclasses.
 
-### [Replace Optional Fields with Variant Union](#replace-optional-fields-with-variant-union)
-Use when one broad record has many optional fields but only certain combinations are valid. Trigger: AI-generated DTOs with `?` on most properties, comments saying fields are present only for one status, or validation rejecting states the type system could prevent.
-
-### [Replace Boolean Flags with State Union](#replace-boolean-flags-with-state-union)
-Use when several booleans encode mutually exclusive or contradictory states. Trigger: fields like `isLoading`, `isLoaded`, `hasError`, and `isSaving` on the same object, or guards that combine flags to recover the real state.
-
-### [Replace Enum Plus Payload Fields with Variant Union](#replace-enum-plus-payload-fields-with-variant-union)
-Use when an enum/type-code chooses a case but payload data sits in sibling optional fields. Trigger: `kind`, `type`, `status`, or `method` plus case-specific optional properties, constructors validating payloads by enum value, or switches reading different payload fields per case.
-
-### [Replace Subclasses with Union Variants](#replace-subclasses-with-union-variants)
-Use when a class hierarchy is just a closed set of data shapes. Trigger: data-only subclasses, `instanceof` checks after construction, visitor code that recovers concrete subtype, or serialization code that wants plain variants.
-
-### [Add Exhaustive Match](#add-exhaustive-match)
-Use when a union or enum exists but consumers handle it with partial conditionals, default branches, casts, or fallthrough. Trigger: `switch` with `default`, TypeScript code missing a `never` check, Rust `match` using `_` when each variant should be explicit, or tests missing union cases.
-
+- [Replace Optional Fields with Variant Union](#replace-optional-fields-with-variant-union)
+- [Replace Boolean Flags with State Union](#replace-boolean-flags-with-state-union)
+- [Replace Enum Plus Payload Fields with Variant Union](#replace-enum-plus-payload-fields-with-variant-union)
+- [Replace Subclasses with Union Variants](#replace-subclasses-with-union-variants)
+- [Add Exhaustive Match](#add-exhaustive-match)
 ## Simplifying Conditional Logic
 
-### [Decompose Conditional](#decompose-conditional)
-Use when condition, then branch, or else branch hides intent behind low-level details. Trigger: complex `if` statements, business rules buried in expressions, branch bodies with separate responsibilities, or comments explaining each leg.
-
-### [Replace Nested Conditional With Guard Clauses](#replace-nested-conditional-with-guard-clauses)
-Use when nested conditionals obscure the normal path through a function. Trigger: arrow-shaped indentation, special cases wrapped around the main behavior, or readers needing to track several levels before seeing the happy path.
-
-### [Introduce Special Case](#introduce-special-case)
-Use when the same null, missing, default, or exceptional value handling appears throughout the code. Trigger: repeated `if null` or `if unknown` checks, default-value branches, or callers that must remember fallback behavior for the same concept.
-
+- [Decompose Conditional](#decompose-conditional)
+- [Replace Nested Conditional With Guard Clauses](#replace-nested-conditional-with-guard-clauses)
+- [Introduce Special Case](#introduce-special-case)
 ## Refactoring APIs
 
-### [Remove Flag Argument](#remove-flag-argument)
-Use when a boolean or enum parameter makes one function behave like multiple different functions. Trigger: calls with `true` or `false` that do not explain intent, branches controlled only by the flag, or callers forced to know mode internals.
-
-### [Replace Parameter With Query](#replace-parameter-with-query)
-Use when a callee can determine a parameter itself more reliably than callers can. Trigger: callers calculating the same argument before every call, parameters derived from other parameters, or duplicated pre-call queries.
-
-### [Replace Constructor With Factory Function](#replace-constructor-with-factory-function)
-Use when object creation needs a clearer name, subtype choice, caching, validation, or a return type that constructors cannot express. Trigger: constructors with flags or type codes, callers choosing subclasses manually, or creation logic duplicated around `new`.
-
+- [Remove Flag Argument](#remove-flag-argument)
+- [Replace Parameter With Query](#replace-parameter-with-query)
+- [Replace Constructor With Factory Function](#replace-constructor-with-factory-function)
 ## Composition-Oriented Refactorings
 
-### [Replace Inheritance with Composition](#replace-inheritance-with-composition)
-Use when a subclass mainly borrows implementation, blocks inherited behavior, or is not honestly substitutable for its superclass. Trigger: forced "is-a" relationships, many unused inherited methods, protected-field coupling, or variation that would be clearer as an owned collaborator.
-
-### [Split Interface with Composition](#split-interface-with-composition)
-Use when a large interface makes consumers and implementers depend on methods they do not need. Trigger: no-op interface methods, bulky test doubles, generic service interfaces, or call sites that accept a large API but use only one small role.
-
-### [Extract Role Interface](#extract-role-interface)
-Use when a consumer depends on a concrete class or broad service but uses only one small role. Trigger: bulky mocks, concrete service parameters, narrow call-site usage, or dependency changes rippling into consumers that do not use the changed behavior.
-
-### [Introduce Port Adapter](#introduce-port-adapter)
-Use when core code imports infrastructure, SDKs, framework objects, or vendor-specific request shapes directly. Trigger: domain logic building third-party requests, tests needing real infrastructure, repeated SDK mapping, or vendor exceptions leaking through the core.
-
-### [Replace Singleton with Injected Dependency](#replace-singleton-with-injected-dependency)
-Use when code reaches into global services or singleton state instead of receiving the collaborator it needs. Trigger: `instance()` calls, service locators, process-wide context, tests that reset globals, or hidden dependencies that block isolated tests.
-
-### [Replace Conditional with Strategy](#replace-conditional-with-strategy)
-Use when conditionals choose between interchangeable policies, algorithms, providers, or modes. Trigger: switches on type or mode, new cases editing central logic, runtime behavior selection, or planned subclasses that would vary by only one decision.
-
-### [Extract Composed Capability](#extract-composed-capability)
-Use when optional behavior should live in a focused component instead of widening a base class or interface. Trigger: `canX`/`supportsX` checks, optional hooks, nullable feature collaborators, or capability flags that decide whether behavior exists.
-
-
+- [Replace Inheritance with Composition](#replace-inheritance-with-composition)
+- [Split Interface with Composition](#split-interface-with-composition)
+- [Extract Role Interface](#extract-role-interface)
+- [Introduce Port Adapter](#introduce-port-adapter)
+- [Replace Singleton with Injected Dependency](#replace-singleton-with-injected-dependency)
+- [Replace Conditional with Strategy](#replace-conditional-with-strategy)
+- [Extract Composed Capability](#extract-composed-capability)
 
 ## Design Patterns
 
 Introduce these patterns when structural problems recur. Each addresses a specific coupling or construction smell and has a TypeScript-idiomatic form.
 
-### [Builder](#builder)
-Use when an object requires many construction parameters, optional configuration, or must only exist in a fully valid state. Trigger: constructors with 5+ params, callers passing `undefined` for unused slots, repeated object setup sequences. TypeScript: fluent builder with method chaining and `build()` returning a validated `Readonly<T>`; for simple cases, prefer a typed options object with a factory function.
-
-### [Facade](#facade)
-Use when a subsystem is too complex for callers to use directly or the same multi-step orchestration repeats across callers. Trigger: callers importing many unrelated modules to complete one task, initialization sequences scattered everywhere. TypeScript: thin exported function or module that orchestrates the subsystem; use a class only when the facade needs state.
-
-### [Decorator](#decorator)
-Use when cross-cutting behavior (logging, caching, retry, auth, metrics) should wrap an existing function or object without modifying it. Trigger: same concern copy-pasted across service methods, tests needing to verify cross-cutting behavior independently. TypeScript: higher-order function wrapping the same signature, or a class implementing the same interface; prefer function form over class form.
-
-### [Observer](#observer)
-Use when a producer should not know its consumers or multiple components must react to the same state change. Trigger: a function directly calling many unrelated components after completing work, adding a new reaction requiring changes to the event source. TypeScript: typed event bus, callback array with unsubscribe, or reactive library (signals, RxJS).
-
-### [Chain of Responsibility](#chain-of-responsibility)
-Use when a request should pass through a series of handlers that each decide to handle or pass it on, and the chain can vary. Trigger: nested if-else dispatch, middleware-like logic embedded in a single large function, adding a new processing step requiring modification of central dispatch. TypeScript: middleware array with `next()` callback preferred over linked-list handler objects.
-
-### [Memento](#memento)
-Use when you need to save and restore object state for undo/redo, wizard back navigation, or rollback on failure. Trigger: state manually copied before risky operations, undo implemented by ad-hoc object cloning, rollback logic scattered across callers. TypeScript: immutable typed snapshot stored externally in a history stack; keep snapshots serializable.
-
-### [Iterator and Async Iterator](#iterator-and-async-iterator)
-Use when a function builds an array only for the caller to iterate it once, or when a callback-based API pushes values one at a time. Trigger: `push` into result array then return, `onData` callbacks as only consumption model, fetching all pages before processing begins. TypeScript: `function*` for synchronous lazy sequences, `async function*` for I/O-bound or paginated streams; consume with `for...of` / `for await...of`.
+- [Builder](#builder)
+- [Facade](#facade)
+- [Decorator](#decorator)
+- [Observer](#observer)
+- [Chain of Responsibility](#chain-of-responsibility)
+- [Memento](#memento)
+- [Iterator and Async Iterator](#iterator-and-async-iterator)
 
 # Extract Composed Capability
 
@@ -624,27 +537,10 @@ Change Function Declaration changes function name, parameters, or full signature
 - If removing parameter, ensure body no longer references it.
 - Change declaration.
 - Update all references.
-- Test.
 - Prefer separate steps for rename, add parameter, remove parameter, or larger signature change.
-
-## Migration Mechanics
-
-- Refactor body first if needed.
-- Use [Extract Function](#extract-function) on old body to create new function.
-- Use temporary searchable name when final name conflicts with old name.
-- Add needed parameters with simple mechanics.
-- Test.
-- Apply [Inline Function](#inline-function) to old function, caller by caller.
-- Rename temporary function back with Change Function Declaration.
-- Test.
 
 ## Notes
 
-- Aka: Rename Function.
-- Formerly: Rename Method.
-- Formerly: Add Parameter.
-- Formerly: Remove Parameter.
-- Aka: Change Signature.
 - Use simple mechanics when declaration and callers can change together safely.
 - Use migration when callers are many, hard to reach, polymorphic, or change is complex.
 - For polymorphic methods, add forwarding method per binding; superclass forwarding is enough inside one hierarchy.
@@ -683,24 +579,12 @@ Move related functions and shared data into one class when they operate as one c
 - Source data may change after creation and derived values must stay current.
 - Nested functions would hide behavior from tests or collaborators.
 
-## Mechanics
-
-- Apply [Encapsulate Record](#encapsulate-record) to common data record.
-- If common data is not grouped, use [Introduce Parameter Object](#introduce-parameter-object).
-- Move each related function into new class with [Move Function](#move-function).
-- Remove arguments now available as fields/getters.
-- Extract remaining data-manipulating logic with [Extract Function](#extract-function), then move it into class.
-- Rename moved functions when method/property name can better fit domain.
-- Test after each move.
-
 ## Notes
 
 - Alternative: Combine Functions into Transform.
 - Prefer class over transform when core data can mutate; methods recalculate from current state.
 - Transform fits immutable/read-only pipelines better.
-- Class helps discover behavior because functions sit next to data.
-- Uniform Access Principle [mfua]: client need not know whether `baseCharge` is stored field or derived getter.
-- Languages without first-class classes can use Function As Object [mffao].
+- Uniform Access Principle: client need not know whether `baseCharge` is stored field or derived getter.
 - TypeScript alternative: a plain module exporting functions over a `readonly` data type is idiomatic and testable without a class; use a class when private mutable state or encapsulated invariants are needed.
 
 ## Example
@@ -736,26 +620,11 @@ Extract Function moves coherent code fragment into named function. Use when name
 - Same or similar code appears elsewhere; pair later with Replace Inline Code with Function Call.
 - Short function still useful when name carries intent.
 
-## Mechanics
-
-- Create target function named for what code does, not how.
-- Copy fragment into target function.
-- Resolve source-scope variables.
-- Pass read-only locals and parameters as arguments.
-- Move declarations used only inside fragment into target function.
-- For one reassigned local used later, return new value and assign call result.
-- If many locals need assignment/return, stop and simplify first with [Split Variable](#split-variable) or Replace Temp with Query.
-- Replace original fragment with target call.
-- Compile when useful.
-- Test.
-
 ## Notes
 
-- Formerly: Extract Method.
 - Inverse: [Inline Function](#inline-function).
 - If no better name exists, do not extract.
 - Nested functions reduce scope problems, but sibling/top-level extraction exposes variable pain earlier.
-- Function-call performance rarely blocks this refactoring; measure before optimizing.
 
 ## Example
 
@@ -793,17 +662,8 @@ Inline Function replaces function call with function body. Use when body communi
 - Badly factored functions need flattening before better extraction.
 - Small body can fit caller with little adjustment.
 
-## Mechanics
-
-- Check target is not polymorphic; overridden method cannot be inlined safely.
-- Find callers.
-- Replace each call with function body, adapting parameter names and local context.
-- Test after each replacement.
-- Remove function definition after all callers move.
-
 ## Notes
 
-- Formerly: Inline Method.
 - Inverse: [Extract Function](#extract-function).
 - Inlining can proceed one caller or one statement at time.
 - For awkward bodies, use Move Statements to Callers first.
@@ -844,23 +704,8 @@ Replace repeated parameter clumps with one object that names relationship betwee
 - Callers already pull values as pair/group from another object.
 - You want common behavior over that group to become explicit.
 
-## Mechanics
-
-- Create suitable structure if none exists.
-- Prefer class when later behavior belongs with data.
-- Make it value object [mfvo] when updates are unnecessary.
-- Test.
-- Use [Change Function Declaration](#change-function-declaration) to add new object parameter.
-- Test.
-- Update each caller to pass correct instance; test after each one.
-- Replace original parameter uses with object element access one by one.
-- Remove old parameters as their uses disappear.
-- Test.
-
 ## Notes
 
-- Data object gives one vocabulary for same concept across callers.
-- Refactoring is often first step toward richer abstraction, not final state.
 - After object exists, move common behavior into it, such as `contains` on range object.
 - Watch for nearby equivalent clumps with different names, such as `temperatureFloor`/`temperatureCeiling` versus `min`/`max`.
 - Add value-based equality when object should behave as true value object.
@@ -894,14 +739,6 @@ Split Phase separates mixed logic into sequential stages with explicit handoff d
 - Input shape differs from model needed by main logic.
 - Later changes likely hit one stage, not whole algorithm.
 - Compiler-style pipeline fits: tokenize, parse, transform, generate.
-
-## Mechanics
-- Extract second phase with [Extract Function](#extract-function).
-- Add intermediate data structure argument to second phase.
-- Move parameters produced or mainly used by first phase into that structure, one at time, testing each move.
-- For values second phase should not know as raw params, compute fields in intermediate data and use Move Statements to Callers.
-- Extract first phase into function returning intermediate data.
-- Option: make first phase transformer object when state or helper behavior grows.
 
 ## Notes
 - Best clue: stages use different data/functions.
@@ -976,14 +813,6 @@ class Organization {
 
 For **nested structures**, define nested interfaces and migrate update paths first before adding validation.
 
-## Mechanics
-- Define a typed interface that names all fields explicitly.
-- Replace `any`, string-keyed access, and raw object literals with the typed shape.
-- Add `readonly` to fields that should not be mutated after construction.
-- If mutation control is needed, wrap in a class with `#private` fields and getters/setters.
-- For nested mutable structures, use [Move Function](#move-function) to centralize updates before adding wrappers.
-- If the record has many optional fields for mutually exclusive states, prefer [Replace Optional Fields with Variant Union](#replace-optional-fields-with-variant-union).
-
 ## Notes
 - Immutable records gain most from typed interfaces; `as const satisfies T` locks shape at call site.
 - Copy on construction or use `Readonly<T>` / `structuredClone` to avoid aliasing bugs with mutable data.
@@ -1000,16 +829,6 @@ Extract Class splits bloated class by moving cohesive data and behavior into new
 - Data changes together or depends tightly on other data.
 - Removing one field/function would make small method group nonsense.
 - Subclasses affect only part of class, or different features need different subtype axes.
-
-## Mechanics
-
-- Choose split. If source class name no longer fits, rename it.
-- Create extracted class for split responsibility.
-- Construct extracted object from source class; keep source-to-extracted link.
-- Use [Move Field](#move-field) field by field. Test after each move.
-- Use [Move Function](#move-function) method by method. Move low-level callees before callers. Test after each move.
-- Review both interfaces. Remove dead delegators/accessors. Rename members for new context.
-- Decide whether clients can see extracted object. If yes, consider [Change Reference to Value](#change-reference-to-value) when object should behave as value object.
 
 ## Notes
 
@@ -1056,17 +875,6 @@ Replace Primitive with Object wraps simple value in class that can hold behavior
 - Type code wants named behavior but full hierarchy unnecessary.
 - Future behavior belongs with value, not callers.
 
-## Mechanics
-- Apply Encapsulate Variable if field/access not already encapsulated.
-- Create small value class; constructor takes existing value; provide value getter or conversion like `toString()`.
-- Run static checks.
-- Change setter to store new value object, e.g. `new Priority(aString)`.
-- Change getter to return existing primitive representation first to preserve callers.
-- Test.
-- Rename primitive-returning accessor with [Rename Function](#change-function-declaration), e.g. `priorityString`.
-- Add object-returning accessor when callers should use object behavior.
-- Decide value/reference semantics with [Change Reference to Value](#change-reference-to-value) or [Change Value to Reference](#change-value-to-reference).
-
 ## Notes
 - Keep wrapper humble first; move behavior in after tests protect callers.
 - If a type code has case-specific payload fields, prefer [Replace Enum Plus Payload Fields with Variant Union](#replace-enum-plus-payload-fields-with-variant-union).
@@ -1103,18 +911,9 @@ Substitute Algorithm replaces hard-to-follow logic with clearer equivalent algor
 - Planned behavior change becomes easier after replacing algorithm.
 - Existing function can be isolated and tested.
 
-## Mechanics
-
-- Arrange replaceable code so it fills complete function.
-- Prepare tests against that function only.
-- Write alternative algorithm.
-- Run static checks.
-- Compare old and new output. If same, switch. If different, use old algorithm as oracle for debugging.
-
 ## Notes
 
 - Decompose large algorithm first; whole-function replacement is hard while code remains tangled.
-- Preserve externally visible behavior before changing desired behavior.
 - Strong tests matter more here than small-step mechanics.
 
 ## Example
@@ -1154,18 +953,7 @@ Move Field relocates data from source record or class to better target record or
 - Same fact gets stored or updated in multiple places.
 - Broader refactoring shows users should read data from target object instead of source.
 
-## Mechanics
-- Ensure source field encapsulated.
-- Test.
-- Create target field plus accessors.
-- Ensure source object can reach target object; add temporary or permanent reference if needed.
-- Adjust source accessors to read and write target field.
-- Run static checks and tests.
-- Remove source field.
-- Test.
-
 ## Notes
-- Objects/classes make move easier because accessors hide storage change.
 - Bare records need accessor functions and careful migration; prefer [Encapsulate Record](#encapsulate-record) first when possible.
 - Immutable moved field can support duplicate writes while reads migrate.
 - Shared target changes semantics unless all source objects already agree on value; verify with data checks, logging, or [Introduce Assertion](#introduce-assertion).
@@ -1214,22 +1002,8 @@ Move Function puts function in context where its data, callees, callers, and fut
 - Method fits another class/module better.
 - Moving cluster may reveal need for [Combine Functions into Class](#combine-functions-into-class) or [Extract Class](#extract-class).
 
-## Mechanics
-
-- Inspect data/functions used by moving function. Decide what should move together.
-- Move low-level callees first. For one high-level function with private helpers, [Inline Function](#inline-function), move, then reextract if clearer.
-- Check polymorphic methods and superclass/subclass declarations before move.
-- Copy function to target context and adapt body.
-- If body needs source context, pass needed values or source reference.
-- Rename for target context if current name no longer fits.
-- Run static analysis.
-- Make source function delegate to target.
-- Test.
-- Consider [Inline Function](#inline-function) on source delegator.
-
 ## Notes
 
-- Formerly: Move Method.
 - Source delegator can stay for compatibility. Remove it when callers can reach target directly.
 - Moving nested functions: pass captured data as parameters or move dependent helpers too.
 - In JavaScript, prefer modules for visibility; nested functions can hide data dependencies.
@@ -1270,20 +1044,11 @@ Collection pipeline expresses collection processing as ordered operations such a
 - Each loop step maps cleanly to pipeline operation.
 - You want to remove control variables and make object flow explicit.
 
-## Mechanics
-
-- Create variable for loop collection; it may start as copy of existing collection.
-- Move loop behavior into collection pipeline one step at a time.
-- Test after each moved behavior.
-- When loop only assigns accumulator, assign pipeline result directly.
-- Remove empty loop and inline temporary results if clarity improves.
-
 ## Notes
 
-- Common operations: `map` transforms each element; `filter` selects subset; `slice` skips or takes ranges.
 - Keep intermediate collection variable when it explains source data.
 - Rename lambda variables after behavior is safely moved.
-- For more examples, see "Refactoring with Loops and Collection Pipelines" [mfrefpipe].
+- For more examples, see "Refactoring with Loops and Collection Pipelines".
 
 ## Example
 
@@ -1325,18 +1090,9 @@ One loop doing multiple jobs forces every change to understand every job. Split 
 - Combined loop exists only to avoid extra traversal.
 - You want each calculation to return its own value instead of sharing locals or result structures.
 
-## Mechanics
-
-- Copy loop.
-- Remove duplicate side effects so each loop keeps only one responsibility.
-- Test.
-- Use Slide Statements if needed to group setup with each loop.
-- Consider [Extract Function](#extract-function) on each loop.
-
 ## Notes
 
 - Extra traversal is usually not real bottleneck; refactor for clarity first, optimize after measuring.
-- If traversal does become bottleneck, loops can be combined again.
 - Split loops can expose better optimizations than one dense loop.
 
 ## Example
@@ -1375,20 +1131,10 @@ Replace shared reference object with immutable value object copied or reassigned
 - Updating one holder should not update other holders.
 - Candidate class can become immutable.
 
-## Mechanics
-- Check candidate class is immutable or can become immutable.
-- For each setter, apply Remove Setting Method.
-- Make host setters reassign new value object instead of mutating existing object.
-- Add value-based equality using fields.
-- If language uses hash collections, update hashcode method too.
-- Test equal values from independent instances.
-- Test unequal values, wrong type, and null.
-
 ## Notes
 - Inverse: [Change Value to Reference](#change-value-to-reference).
 - Do not use when several objects must share one object and see same mutation.
-- Value Object [mfvo] often final shape.
-- Ruby can override `==`; Java can override `Object.equals()` and `Object.hashCode()`.
+- Value Object often final shape.
 
 ## Example
 
@@ -1417,13 +1163,6 @@ Replace duplicated value objects with one shared reference from repository. Use 
 - Entity data can change or be enriched after load.
 - Duplicate objects risk inconsistent state.
 - One identity per entity is clearer than many equal copies.
-
-## Mechanics
-- Create repository [mfrepos] for related objects if absent.
-- Ensure host constructor can look up correct related object.
-- Change host constructors to obtain related object from repository.
-- Test after each constructor change.
-- Register object on first reference, or preload repository from entity list.
 
 ## Notes
 - Inverse: [Change Reference to Value](#change-reference-to-value).
@@ -1468,21 +1207,9 @@ Replace stored derived data with query that calculates same value from source da
 - Accumulator or cache adds update burden without proven performance need.
 - Source data changes over time, and derived structure lifetime is hard to manage.
 
-## Mechanics
-- Find every update point for variable.
-- If updates mix separate meanings, use [Split Variable](#split-variable) first.
-- Create query function that calculates value from source data.
-- Use [Introduce Assertion](#introduce-assertion) to compare stored value with query where value is read.
-- If assertion needs home, use Encapsulate Variable.
-- Test.
-- Replace readers with query call.
-- Test.
-- Remove declaration and update code with Remove Dead Code.
-
 ## Notes
 - Immutable source data can justify keeping transformed derived data.
 - Transient derived data can be fine either as query or transformation.
-- Objects with calculated properties fit changing source data better than separately maintained derived structures.
 
 ## Example
 
@@ -1531,14 +1258,6 @@ Formerly: Remove Assignments to Parameters; formerly: Split Temp. Variable assig
 - Input parameter is overwritten to hold result.
 - Temp should be assigned once but receives multiple independent assignments.
 
-## Mechanics
-
-- Rename variable at declaration and first assignment for first responsibility.
-- Change references up to next assignment.
-- If possible, declare new variable immutable, such as `const`.
-- Test.
-- Repeat from next assignment until each responsibility has own name.
-
 ## Notes
 
 - Do not split collecting variables such as sums, string concatenation, stream writes, or collection additions.
@@ -1579,14 +1298,6 @@ Caller extracts several values from object then passes pieces. Pass whole object
 - Several callers duplicate extraction or manipulation logic.
 - [Introduce Parameter Object](#introduce-parameter-object) created new whole object and old data clump still leaks through callers.
 
-## Mechanics
-
-- Create new function with desired whole-object parameter and easily searchable temporary name.
-- Implement new function by calling old function, mapping whole object fields to old parameters.
-- Change callers to pass whole object; remove dead extraction code with Remove Dead Code; test after each change.
-- Inline old function into new function with [Inline Function](#inline-function).
-- Rename new function and callers to final name.
-
 ## Notes
 
 - Avoid when callee should not depend on whole object, especially across module boundary.
@@ -1623,17 +1334,8 @@ Literal flag parameter selects branch inside callee. Replace literal calls with 
 - Boolean `true`/`false` hides meaning at call site.
 - Separate behaviors deserve separate API entries and clearer tooling visibility.
 
-## Mechanics
-
-- Create explicit function for each flag value.
-- If flag controls top-level dispatch, use [Decompose Conditional](#decompose-conditional) and move branches into named functions.
-- If flag use tangled, create wrappers such as `rushDeliveryDate(anOrder)` and `regularDeliveryDate(anOrder)` over flag-taking helper.
-- Replace literal callers one at time; test after each change.
-- If no data-driven callers remain, remove original function or restrict/rename it as helper-only.
-
 ## Notes
 
-- Formerly: Replace Parameter with Explicit Methods.
 - Not flag when value flows as data, such as `isRush = determineIfRush(anOrder)` then `deliveryDate(anOrder, isRush)`.
 - Mixed callers: change literal callers; keep original function for data callers.
 - Multiple boolean state fields often want [Replace Boolean Flags with State Union](#replace-boolean-flags-with-state-union), not many explicit functions.
@@ -1670,17 +1372,8 @@ Replace constructor calls with factory function when constructor rules constrain
 - Call sites need normal function value instead of special syntax such as `new`.
 - Literal type codes at call sites need named creation functions.
 
-## Mechanics
-
-- Create factory function that delegates to constructor.
-- Replace constructor calls one by one with factory calls.
-- Test after each replacement.
-- Add named factories for common variants, such as `createEngineer`, instead of passing literal type codes.
-- Limit constructor visibility after callers use factories.
-
 ## Notes
 
-- Formerly: Replace Constructor with Factory Method.
 - Factory keeps creation policy outside callers.
 - Constructor can stay as implementation detail.
 
@@ -1715,15 +1408,8 @@ Parameter duplicates value callee can derive from existing context. Remove param
 - Parameter comes from querying another parameter or receiver.
 - Recent refactoring left parameter redundant.
 
-## Mechanics
-
-- If needed, extract parameter calculation with [Extract Function](#extract-function).
-- Replace parameter references inside function with query expression; test after each change.
-- Use [Change Function Declaration](#change-function-declaration) to remove parameter and update callers.
-
 ## Notes
 
-- Formerly: Replace Parameter with Method.
 - Inverse: [Replace Query with Parameter](#replace-query-with-parameter).
 - Avoid when query adds unwanted dependency to function body.
 - Preserve referential transparency; do not replace parameter with mutable global access.
@@ -1758,14 +1444,6 @@ Function reads value from surrounding scope or global dependency. Pass value as 
 - Function depends on global, module, or receiver query you want to remove.
 - Pure or referentially transparent core should be wrapped by I/O or mutable shell.
 - Dependency direction should move from callee to caller.
-
-## Mechanics
-
-- Use Extract Variable on query inside function.
-- Extract remaining body to new function with easily searchable temporary name.
-- Inline extracted variable so original function delegates with query as argument.
-- Inline original function into callers with [Inline Function](#inline-function).
-- Rename new function to original name.
 
 ## Notes
 
@@ -1812,13 +1490,6 @@ Split complex conditional into named condition and named branch actions. Names e
 - Then or else leg hides intent behind calculation details.
 - Branch names would make caller read like domain language.
 
-## Mechanics
-- Apply [Extract Function](#extract-function) to condition.
-- Apply [Extract Function](#extract-function) to then leg.
-- Apply [Extract Function](#extract-function) to else leg.
-- Test after meaningful extraction steps.
-- Reformat final conditional if clearer, such as ternary for simple expression branches.
-
 ## Notes
 - Pattern is special case of [Extract Function](#extract-function).
 - Name condition for question being asked, not operators used.
@@ -1859,20 +1530,9 @@ Add assertion where code assumes condition must already be true. Use assertion t
 - Assertion clarifies required state at point of execution.
 - Setter, constructor, or trusted boundary can catch invalid object state closer to source.
 
-## Mechanics
-
-- Find assumed condition.
-- Add assertion that states it directly.
-- If expression form blocks assertion, refactor to statement form first.
-- Prefer assertion at source of invariant, such as setter, constructor, or trusted boundary.
-- Remove duplicate conditions by extracting shared predicate with [Extract Function](#extract-function).
-
 ## Notes
 
-- Assertions should be behavior-preserving; program should work correctly if disabled.
-- Do not branch on assertion failures.
 - Do not use assertions for expected user, data, or service validation unless source is trusted and failure means bug.
-- Overuse creates noisy duplicate rules.
 
 ## Example
 
@@ -1911,19 +1571,8 @@ Create special-case object for common response to null, `"unknown"`, or another 
 - Client conditionals repeat name, plan, payment, status, or nested default values.
 - Read-only data can use literal object; behavior or writes usually need class.
 
-## Mechanics
-
-- Add special-case check property to normal subject, returning `false`.
-- Create special-case class or object with same check returning `true`.
-- Extract comparison into function such as `isUnknown(arg)`; update clients one at time.
-- Return special case from container, or transform input data to insert it.
-- Change comparison function to use check property.
-- Move common fallback behavior into special case using [Combine Functions into Class](#combine-functions-into-class) or Combine Functions into Transform.
-- Inline comparison where still useful; remove dead helper after clients no longer call it.
-
 ## Notes
 
-- Formerly: Introduce Null Object; Null Object is one Special Case variant.
 - If absence should be part of a finite state model, prefer a domain-specific variant union over a broad optional record.
 - Special-case objects should be immutable value objects; setters usually no-op when substitute must accept writes.
 - If special case returns related object, return another special case such as `NullPaymentHistory`.
@@ -1964,15 +1613,6 @@ Use guard clauses for exceptional branches so main path stays flat. Keep `if/els
 - One branch handles separated, retired, invalid, error, empty, or other edge case.
 - Reversing condition makes normal path read straight.
 - Multiple guards return same result; then use Consolidate Conditional Expression.
-
-## Mechanics
-
-- Pick outermost exceptional condition.
-- Convert it to early `return`, `throw`, `continue`, or `break`.
-- Test.
-- Repeat inward until normal path is flat.
-- Reverse condition when needed, then simplify negations.
-- Remove dead temp variables after direct returns make them useless.
 
 ## Notes
 
