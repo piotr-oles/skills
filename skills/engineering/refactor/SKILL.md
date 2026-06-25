@@ -1,9 +1,21 @@
 ---
 name: refactor
-description: Use when reviewing or changing code to spot refactoring opportunities, map code smells to Fowler refactoring patterns, and choose a small safe refactoring before feature work or cleanup.
+description: Find refactoring opportunities, use when asked for refactoring, cleanup, simplification of the codebase.
 ---
 
 # Refactoring
+
+## Process
+
+1. Locate places with smell index, high complexity, ambiguous context, duplicated patterns, long procedural blocks, etc. Create a list of up to 5 candidates.
+2. Select top 1 candidate for refactoring from that list based on severity.
+3. For that candidate, explore a few branches of potential refactoring.
+4. Weight pros and cons of each branch, select the most promising one.
+5. Make a verdict if you should do the refactoring or not, optimize for end quality, not amount of needed changes or backward compatibility.
+6. If you decide to refactor, go ahead, use /tdd skill if applicable to make sure you don't break the business logic.
+7. If you decide that refactoring would make things worse (based on pros and cons), go to step 2, but select next top 1 candidate.
+8. At the end note pros and cons, alternative branches considered, and why you decided to refactor or not.
+
 ## How to Choose
 
 - Start from the concrete trigger in the code, not from a preferred pattern name.

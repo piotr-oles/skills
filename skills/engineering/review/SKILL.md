@@ -1,7 +1,6 @@
 ---
 name: review
 description: Deep code review workflow. Spawn logic, system design, and refactor subagents in parallel, address feedback, send follow-ups with changes made.
-disable-model-invocation: true
 ---
 
 ## Review Workflow
