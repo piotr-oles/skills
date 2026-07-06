@@ -12,7 +12,7 @@ Find refactoring opportunities, but do not to implement them, it's not your obje
 3. For that Candidate, explore a few branches of potential refactoring.
 4. Weight pros and cons of each branch, select the most promising one.
 5. Ask user for approval for the refactoring Candidate with a high-level plan, potential branches and recommendation.
-6. If user approves, build a detailed Refactoring plan, outlining high-level before and after and patterns/techniques to use for refactoring. Do not write implementation details.
+6. If user approves, build a detailed Refactoring plan following [PLAN-FORMAT.md](PLAN-FORMAT.md). Do not write implementation details.
 7. If user rejects, go to step 2, but select next top 1 Candidate.
 
 ## Preferences
@@ -30,10 +30,12 @@ Each smell links to a catalog entry under `catalog/`. Open the entry for candida
 - Long function: [Extract Function](catalog/extract-function.md), [Split Phase](catalog/split-phase.md).
 - Duplicate code: [Extract Function](catalog/extract-function.md), [Substitute Algorithm](catalog/substitute-algorithm.md), [Combine Functions into Class](catalog/combine-functions-into-class.md).
 - Comments explaining code: [Extract Function](catalog/extract-function.md).
+- Mysterious or inconsistent name — identifier does not reveal intent, or the same concept is named differently across the code: [Rename](catalog/rename.md).
 - Long parameter list or data clump: [Introduce Parameter Object](catalog/introduce-parameter-object.md), [Extract Class](catalog/extract-class.md), [Use Builder Pattern](catalog/use-builder-pattern.md).
 - Primitive obsession — string/number used for a domain concept (money, id, range): [Replace Conditional with Strategy](catalog/replace-conditional-with-strategy.md).
 - Too many optional fields: [Replace Optional Fields with Variant Union](catalog/replace-optional-fields-with-variant-union.md), [Replace Enum Plus Payload Fields with Variant Union](catalog/replace-enum-plus-payload-fields-with-variant-union.md).
 - Boolean state matrix: [Replace Boolean Flags with State Union](catalog/replace-boolean-flags-with-state-union.md), [Replace Optional Fields with Variant Union](catalog/replace-optional-fields-with-variant-union.md).
+- Behavior and legal transitions vary by a mode/status field, illegal transitions guarded ad hoc across the code: [Use State Pattern](catalog/use-state-pattern.md).
 - Enum/type code with payload fields: [Replace Enum Plus Payload Fields with Variant Union](catalog/replace-enum-plus-payload-fields-with-variant-union.md), [Add Exhaustive Match](catalog/add-exhaustive-match.md).
 - Nullable or sentinel return: [Introduce Special Case](catalog/introduce-special-case.md), or define a domain-specific variant union when absence/failure is part of the state model.
 - Feature envy — a function uses another object's fields/methods more than its own: [Move Function](catalog/move-function.md), [Move Field](catalog/move-field.md), [Extract Role Interface](catalog/extract-role-interface.md).
