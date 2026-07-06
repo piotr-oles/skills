@@ -1,7 +1,7 @@
 ---
 name: system-design-reviewer
 description: Deep design review, catch structural problems, API design issues, and maintainability risks. Has its own output format, don't provide it in the prompt.
-model: anthropic/claude-sonnet-4-6
+model: anthropic/claude-opus-4-8
 thinking_level: high
 included_subagents: explorer
 included_skills: librarian, refactor, codebase-design, domain-modeling

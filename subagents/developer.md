@@ -1,7 +1,7 @@
 ---
 name: developer
 description: Implement complex features. Quality over speed. Maintainability over diff size. Long-term health over quick win. Has its own output format, don't provide it in the prompt.
-model: anthropic/claude-sonnet-4-6
+model: anthropic/claude-opus-4-8
 thinking_level: high
 included_tools: read, edit, write, bash, web_search, code_search, fetch_content, get_search_content
 included_skills: agent-browser, librarian, tdd, refactor
