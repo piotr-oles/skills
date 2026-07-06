@@ -47,6 +47,7 @@ Each smell links to a catalog entry under `catalog/`. Open the entry for candida
 - Middle man or message chains — object mostly delegates, or callers hop `a().b().c()`: [Move Function](catalog/move-function.md).
 - Global state or singleton access: [Replace Singleton with Injected Dependency](catalog/replace-singleton-with-injected-dependency.md), [Introduce Port Adapter](catalog/introduce-port-adapter.md).
 - Broad interface or bulky mock: [Extract Role Interface](catalog/extract-role-interface.md), [Split Interface with Composition](catalog/split-interface-with-composition.md).
+- Test coupled to implementation — mocks internal collaborators, asserts private structure or call order, breaks on behavior-preserving changes: [Retarget Test to Behavior](catalog/retarget-test-to-behavior.md).
 - Inheritance used for reuse: [Replace Inheritance with Composition](catalog/replace-inheritance-with-composition.md).
 - Data-only subclasses: [Replace Subclasses with Union Variants](catalog/replace-subclasses-with-union-variants.md), [Replace Inheritance with Composition](catalog/replace-inheritance-with-composition.md).
 - Subclass explosion or optional behavior: [Extract Composed Capability](catalog/extract-composed-capability.md), [Replace Conditional with Strategy](catalog/replace-conditional-with-strategy.md).
