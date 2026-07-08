@@ -23,6 +23,7 @@ Reachable only when you type them (`disable-model-invocation: true`).
 - **[grill-with-docs](./skills/engineering/grill-with-docs/SKILL.md)** — Grilling session that also builds the project's domain model, sharpening terminology and updating `CONTEXT.md` and ADRs inline.
 - **[implement](./skills/engineering/implement/SKILL.md)** — Execute a plan end-to-end: git setup, TDD, typecheck, review loop.
 - **[review](./skills/engineering/review/SKILL.md)** — Spawn logic, system design, and refactor reviewers in parallel, address feedback, send follow-ups.
+- **[improve-codebase-architecture](./skills/engineering/improve-codebase-architecture/SKILL.md)** — Scan a codebase for deepening opportunities, present a visual HTML report, then grill through the one you pick.
 
 ### Model-invoked
 
@@ -34,6 +35,9 @@ Model- or user-reachable.
 - **[tdd](./skills/engineering/tdd/SKILL.md)** — Test-driven development with red-green-refactor loop, one vertical slice at a time.
 - **[domain-modeling](./skills/engineering/domain-modeling/SKILL.md)** — Actively build and sharpen a project's domain model — challenge terms, stress-test with scenarios, update `CONTEXT.md` and ADRs inline.
 - **[codebase-design](./skills/engineering/codebase-design/SKILL.md)** — Shared vocabulary for designing deep modules: small interfaces, clean seams, testable through the interface.
+- **[design-an-interface](./skills/engineering/design-an-interface/SKILL.md)** — Generate multiple radically different interface designs for a module using parallel sub-agents.
+- **[prototype](./skills/engineering/prototype/SKILL.md)** — Build a throwaway prototype to answer a design question — sanity-check a state model, logic, or UI.
+- **[research](./skills/engineering/research/SKILL.md)** — Investigate a question against high-trust primary sources and capture the findings as a Markdown file.
 
 ## Productivity
 
@@ -44,6 +48,17 @@ Skills for daily non-code workflow tools.
 Model- or user-reachable.
 
 - **[kanban-md](./skills/productivity/kanban-md/SKILL.md)** — Manage project tasks using kanban-md, a file-based kanban board CLI.
+
+## Misc
+
+Skills kept around but rarely used.
+
+### User-invoked
+
+Reachable only when you type them (`disable-model-invocation: true`).
+
+- **[teach](./skills/misc/teach/SKILL.md)** — Teach the user a new skill or concept within the workspace.
+- **[writing-great-skills](./skills/misc/writing-great-skills/SKILL.md)** — Reference for writing and editing skills well — the vocabulary and principles that make a skill predictable.
 
 ## Subagents
 

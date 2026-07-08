@@ -5,27 +5,33 @@ description: Build and sharpen a project's domain model. Use when the user wants
 
 # Domain Modeling
 
-Actively build and sharpen the project's domain model as you design. This is the *active* discipline — challenging terms, inventing edge-case scenarios, and writing the glossary and decisions down the moment they crystallise. (Merely *reading* `AGENTS.md` for vocabulary is not this skill — that's a one-line habit any skill can do. This skill is for when you're changing the model, not just consuming it.)
+Actively build and sharpen the project's domain model as you design. This is the *active* discipline — challenging terms, inventing edge-case scenarios, and writing the glossary and decisions down the moment they crystallise. (Merely *reading* `CONTEXT.md` for vocabulary is not this skill — that's a one-line habit any skill can do. This skill is for when you're changing the model, not just consuming it.)
 
 ## File structure
 
+The glossary lives in a `CONTEXT.md` at the directory level that owns the context — usually next to the `AGENTS.md` for that directory. In a monorepo a package or bounded-context dir gets its own `CONTEXT.md`; there is no central map file.
+
 ```
 /
-├── AGENTS.md              ← contains ## Ubiquitous Language section
+├── AGENTS.md              ← links to ./CONTEXT.md
+├── CONTEXT.md             ← glossary for the repo-level context
 ├── docs/
 │   └── adr/
 │       ├── 0001-event-sourced-orders.md
 │       └── 0002-postgres-for-write-model.md
-└── src/
+└── packages/
+    └── billing/
+        ├── AGENTS.md      ← links to ./CONTEXT.md
+        └── CONTEXT.md     ← glossary for the billing context
 ```
 
-Create lazily — only when you have something to write. If no `## Ubiquitous Language` section exists yet, ask the user which directory it should live in before creating it. If no `docs/adr/` exists, create it when the first ADR is needed.
+Create lazily — only when you have a term to write. If it's unclear which directory a `CONTEXT.md` belongs in, ask the user. Whenever you create a `CONTEXT.md`, make sure the sibling `AGENTS.md` links to it (add the link if missing). If no `docs/adr/` exists, create it when the first ADR is needed.
 
 ## During the session
 
 ### Challenge against the glossary
 
-When the user uses a term that conflicts with the existing language in `AGENTS.md`, call it out immediately. "Your glossary defines 'cancellation' as X, but you seem to mean Y — which is it?"
+When the user uses a term that conflicts with the existing language in the relevant `CONTEXT.md`, call it out immediately. "Your glossary defines 'cancellation' as X, but you seem to mean Y — which is it?"
 
 ### Sharpen fuzzy language
 
@@ -39,11 +45,11 @@ When domain relationships are being discussed, stress-test them with specific sc
 
 When the user states how something works, check whether the code agrees. If you find a contradiction, surface it: "Your code cancels entire Orders, but you just said partial cancellation is possible — which is right?"
 
-### Update AGENTS.md inline
+### Update CONTEXT.md inline
 
-When a term is resolved, update the `## Ubiquitous Language` section in `AGENTS.md` right there. Don't batch these up — capture them as they happen. Use the format in [UL-FORMAT.md](./UL-FORMAT.md).
+When a term is resolved, update the `CONTEXT.md` for that context right there. Don't batch these up — capture them as they happen. Use the format in [CONTEXT-FORMAT.md](./CONTEXT-FORMAT.md).
 
-The `## Ubiquitous Language` section should be totally devoid of implementation details. Do not treat it as a spec, a scratch pad, or a repository for implementation decisions. It is a glossary and nothing else.
+`CONTEXT.md` should be totally devoid of implementation details. Do not treat it as a spec, a scratch pad, or a repository for implementation decisions. It is a glossary and nothing else.
 
 ### Offer ADRs sparingly
 
