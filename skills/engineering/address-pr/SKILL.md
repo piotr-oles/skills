@@ -1,12 +1,12 @@
 ---
 name: address-pr
-description: Fetch and address PR feedback. Use when user asks to address PR comments, review feedback, or respond to PR suggestions.
+description: Fetch PR inline comments, reviews, and issue comments; address each; commit and push.
 disable-model-invocation: true
 ---
 
 # Address PR Feedback
 
-Scripts live next to this `SKILL.md`. Derive `SKILL_DIR` from the path of this file, then run from repo root.
+Scripts live next to this `SKILL.md`. Set `SKILL_DIR` to this file's parent directory before calling them; run scripts from repo root.
 
 ## Step 1: Find the PR
 
@@ -23,11 +23,13 @@ bash "$SKILL_DIR/fetch-pr-feedback.sh" "$PR"
 
 ## Step 3: Address each piece of feedback
 
-Work through comments one by one. For each:
+Every comment must be accounted for — none skipped. For each:
 
 - Read the comment and the referenced file/line.
-- Make the change.
-- If the comment is unclear, ask the user before proceeding.
+- Make the change, or explicitly decline with a reason.
+- If the comment is unclear or requested change is big/unsafe, ask the user before proceeding.
+
+Done when every fetched comment is either changed or declined with reason.
 
 ## Step 4: Commit
 
@@ -49,6 +51,4 @@ git push --force-with-lease
 
 ## Notes
 
-- Scripts sit next to this `SKILL.md`. Set `SKILL_DIR` to this file's parent directory before calling them.
-- If `git` commands fail with "not a git repository / must be run in a work tree", the shell is inside a worktree whose `GIT_DIR` env is unset. Use explicit flags: `git --work-tree=. --git-dir=.git <cmd>`.
 - If the PR description also contains stale information addressed by the feedback, update it: `gh pr edit <number> --body "..."`.
