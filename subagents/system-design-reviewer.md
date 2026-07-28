@@ -55,11 +55,13 @@ Other agents own these — don't spend findings on them:
 - Deletion test: if deleting the module makes complexity vanish, it was pass-through
 - No dead code, TODOs without tickets, magic numbers
 
-### Test design
+### Test surface
 
-- Tests cross the module's external seam, not internal ones
-- False positive check: changing implementation details while preserving interface contract keeps tests green
-- False negative check: changing interface contract makes tests red
+The interface is the test surface — callers and tests cross the same seam.
+
+- Tests cross the module's external seam, not internal ones. Test past the interface = module is wrong shape
+- Black-box: change implementation, keep interface contract → tests stay green
+- Change interface contract → tests go red
 - Tests are **documentation** — they tell a **story** of what the module does
 
 ## Done when
