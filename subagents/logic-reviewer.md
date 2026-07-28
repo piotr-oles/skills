@@ -1,8 +1,8 @@
 ---
 name: logic-reviewer
 description: Deep logic review, catch bugs, incorrect behavior, and missing test coverage. Has its own output format, don't provide it in the prompt.
-model: anthropic/claude-opus-4-8
-thinking_level: high
+model: claude-opus-5
+thinking: high
 included_subagents: explorer
 included_skills: librarian, refactor
 ---

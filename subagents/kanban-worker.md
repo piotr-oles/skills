@@ -2,7 +2,7 @@
 name: kanban-worker
 description: Autonomous kanban board worker. Picks tasks, implements them in a worktree branch, moves to review. Parallel-safe via claim mechanic. Use when user asks to work through kanban tasks, run kanban-based development loop, or drain the board autonomously.
 model: anthropic/claude-sonnet-4-6
-thinking_level: high
+thinking: high
 included_tools: read, edit, write, bash, web_search, code_search, fetch_content, get_search_content
 included_skills: kanban-md, tdd, refactor
 included_subagents: developer, explorer

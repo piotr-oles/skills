@@ -1,8 +1,8 @@
 ---
 name: refactor-reviewer
 description: Deep refactoring review using Fowler patterns and design patterns. Finds code smells, maps them to concrete refactorings, and prioritizes by how much they block change or hide intent. Has its own output format, don't provide it in the prompt.
-model: anthropic/claude-opus-4-8
-thinking_level: high
+model: claude-opus-5
+thinking: high
 included_subagents: explorer
 included_skills: librarian, refactor
 ---

@@ -1,8 +1,8 @@
 ---
 name: project-manager
 description: Describe work from user/product perspective
-model: anthropic/claude-sonnet-4-6
-thinking_level: medium
+model: claude-sonnet-5
+thinking: medium
 included_tools: read, bash, web_search, code_search, fetch_content, get_search_content
 included_subagents: explorer
 included_skills: kanban-md, agent-browser, atlassian-cli, librarian
