@@ -20,7 +20,6 @@ Skills for daily code work.
 Reachable only when you type them (`disable-model-invocation: true`).
 
 - **[implement](./skills/engineering/implement/SKILL.md)** — Execute a plan end-to-end: git setup, TDD, typecheck, review loop.
-- **[review](./skills/engineering/review/SKILL.md)** — Spawn logic, system design, and refactor reviewers in parallel, address feedback, send follow-ups.
 - **[improve-codebase-architecture](./skills/engineering/improve-codebase-architecture/SKILL.md)** — Scan a codebase for deepening opportunities, present a visual HTML report, then grill through the one you pick.
 - **[address-pr](./skills/engineering/address-pr/SKILL.md)** — Fetch PR inline comments, reviews, and issue comments; address each one; commit and push.
 - **[create-pr](./skills/engineering/create-pr/SKILL.md)** — Create or update a pull request with a verified title, description, QA steps, and blast radius.
