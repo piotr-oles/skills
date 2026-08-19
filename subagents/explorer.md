@@ -1,7 +1,7 @@
 ---
 name: explorer
 description: Fast codebase exploration - gathers context without making changes
-model: gemini-3.6-flash
+model: glm-5.2
 thinking: low
 included_tools: read, bash, web_search, code_search, fetch_content, get_search_content
 included_skills: agent-browser, librarian

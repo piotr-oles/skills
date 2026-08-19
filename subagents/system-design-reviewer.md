@@ -1,6 +1,6 @@
 ---
 description: Deep system design review — module depth, seam placement, codebase consistency, domain language, YAGNI. Has its own output format, don't provide it in the prompt.
-model: claude-opus-5
+model: gpt-5.6-sol
 thinking: high
 included_tools: read, bash, web_search, code_search, fetch_content, get_search_content
 included_skills: librarian, codebase-design

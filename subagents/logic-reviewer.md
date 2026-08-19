@@ -1,7 +1,7 @@
 ---
 name: logic-reviewer
 description: Deep logic review, catch bugs, incorrect behavior, and missing test coverage. Has its own output format, don't provide it in the prompt.
-model: claude-opus-5
+model: gpt-5.6-sol
 thinking: high
 included_subagents: explorer
 included_skills: librarian, refactor

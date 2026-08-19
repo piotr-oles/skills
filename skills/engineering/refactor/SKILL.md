@@ -1,6 +1,7 @@
 ---
 name: refactor
 description: Find refactoring opportunities, use when asked for refactoring, cleanup, simplification of the codebase.
+disable-model-invocation: true
 ---
 
 Find refactoring opportunities, but do not to implement them, it's not your objective.
