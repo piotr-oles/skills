@@ -19,35 +19,22 @@ Skills for daily code work.
 
 Reachable only when you type them (`disable-model-invocation: true`).
 
-- **[grill](./skills/engineering/grill/SKILL.md)** — Relentlessly interviewed about a plan or design until every branch of the decision tree is resolved.
-- **[grill-with-docs](./skills/engineering/grill-with-docs/SKILL.md)** — Grilling session that also builds the project's domain model, sharpening terminology and updating `CONTEXT.md` and ADRs inline.
 - **[implement](./skills/engineering/implement/SKILL.md)** — Execute a plan end-to-end: git setup, TDD, typecheck, review loop.
 - **[review](./skills/engineering/review/SKILL.md)** — Spawn logic, system design, and refactor reviewers in parallel, address feedback, send follow-ups.
 - **[improve-codebase-architecture](./skills/engineering/improve-codebase-architecture/SKILL.md)** — Scan a codebase for deepening opportunities, present a visual HTML report, then grill through the one you pick.
+- **[address-pr](./skills/engineering/address-pr/SKILL.md)** — Fetch PR inline comments, reviews, and issue comments; address each one; commit and push.
+- **[refactor](./skills/engineering/refactor/SKILL.md)** — Spot refactoring opportunities, map code smells to Fowler patterns, choose safe refactoring before feature work or cleanup.
+- **[design-an-interface](./skills/engineering/design-an-interface/SKILL.md)** — Generate multiple radically different interface designs for a module using parallel sub-agents.
 
 ### Model-invoked
 
 Model- or user-reachable.
 
-- **[address-pr](./skills/engineering/address-pr/SKILL.md)** — Fetch PR inline comments, reviews, and issue comments; address each one; commit and push.
-- **[refactor](./skills/engineering/refactor/SKILL.md)** — Spot refactoring opportunities, map code smells to Fowler patterns, choose safe refactoring before feature work or cleanup.
+- **[grilling](./skills/engineering/grilling/SKILL.md)** — Relentlessly interview the user about a plan or design until every branch of the design tree is resolved.
 - **[agent-browser](./skills/engineering/agent-browser/SKILL.md)** — Browser automation via CDP: accessibility-tree snapshots, auth state, multi-tab, React introspection.
 - **[tdd](./skills/engineering/tdd/SKILL.md)** — Test-driven development with red-green-refactor loop, one vertical slice at a time.
 - **[domain-modeling](./skills/engineering/domain-modeling/SKILL.md)** — Actively build and sharpen a project's domain model — challenge terms, stress-test with scenarios, update `CONTEXT.md` and ADRs inline.
 - **[codebase-design](./skills/engineering/codebase-design/SKILL.md)** — Shared vocabulary for designing deep modules: small interfaces, clean seams, testable through the interface.
-- **[design-an-interface](./skills/engineering/design-an-interface/SKILL.md)** — Generate multiple radically different interface designs for a module using parallel sub-agents.
-- **[prototype](./skills/engineering/prototype/SKILL.md)** — Build a throwaway prototype to answer a design question — sanity-check a state model, logic, or UI.
-- **[research](./skills/engineering/research/SKILL.md)** — Investigate a question against high-trust primary sources and capture the findings as a Markdown file.
-
-## Productivity
-
-Skills for daily non-code workflow tools.
-
-### Model-invoked
-
-Model- or user-reachable.
-
-- **[kanban-md](./skills/productivity/kanban-md/SKILL.md)** — Manage project tasks using kanban-md, a file-based kanban board CLI.
 
 ## Misc
 
@@ -58,7 +45,8 @@ Skills kept around but rarely used.
 Reachable only when you type them (`disable-model-invocation: true`).
 
 - **[teach](./skills/misc/teach/SKILL.md)** — Teach the user a new skill or concept within the workspace.
-- **[writing-great-skills](./skills/misc/writing-great-skills/SKILL.md)** — Reference for writing and editing skills well — the vocabulary and principles that make a skill predictable.
+- **[wait-what](./skills/misc/wait-what/SKILL.md)** — Explain in simple language.
+- **[writing-for-agents](./skills/misc/writing-for-agents/SKILL.md)** — Reference for writing and editing skills well — the vocabulary and principles that make a skill predictable.
 
 ## Subagents
 
