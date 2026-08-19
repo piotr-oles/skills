@@ -23,6 +23,7 @@ Reachable only when you type them (`disable-model-invocation: true`).
 - **[review](./skills/engineering/review/SKILL.md)** — Spawn logic, system design, and refactor reviewers in parallel, address feedback, send follow-ups.
 - **[improve-codebase-architecture](./skills/engineering/improve-codebase-architecture/SKILL.md)** — Scan a codebase for deepening opportunities, present a visual HTML report, then grill through the one you pick.
 - **[address-pr](./skills/engineering/address-pr/SKILL.md)** — Fetch PR inline comments, reviews, and issue comments; address each one; commit and push.
+- **[create-pr](./skills/engineering/create-pr/SKILL.md)** — Create or update a pull request with a verified title, description, QA steps, and blast radius.
 - **[refactor](./skills/engineering/refactor/SKILL.md)** — Spot refactoring opportunities, map code smells to Fowler patterns, choose safe refactoring before feature work or cleanup.
 - **[design-an-interface](./skills/engineering/design-an-interface/SKILL.md)** — Generate multiple radically different interface designs for a module using parallel sub-agents.
 

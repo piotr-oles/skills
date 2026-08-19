@@ -1,0 +1,85 @@
+---
+name: create-pr
+description: Create or update a pull request for current branch with a verified title, description, QA steps, and blast radius.
+disable-model-invocation: true
+---
+
+# Create or Update Pull Request
+
+Find PR for the current branch with `gh pr view`. If no PR exists, create draft PR.
+
+## 1. Get evidence
+
+Find default branch and comparison base:
+
+```bash
+MAIN=$(git remote show origin | sed -n 's/.*HEAD branch: //p')
+BASE=$(git merge-base "origin/$MAIN" HEAD)
+git log --oneline "$BASE"..HEAD
+git diff "$BASE"..HEAD
+```
+
+Inspect every commit and full diff. Search codebase before each claim about callers, readers, writers, compatibility, migrations, or affected paths. Omit claim when evidence does not confirm it.
+
+## 2. Get motivation
+
+Ask user what was wrong or missing before PR and why it mattered. Offer 1-3 likely answers based on verified facts, and let user write different answer. Do not draft Motivation until user answers.
+
+## 3. Draft title and body
+
+Title: one short command or noun phrase. Add ticket prefix only when repo convention needs one.
+
+**Skimmable:** Keep body near 250 words and explain why, not only what.
+
+**STE:** Write title and body in ASD-STE100 Simplified Technical English.
+
+Use these sections in this order:
+
+```markdown
+## Motivation
+
+One short paragraph about what was wrong or missing before PR, its effect, and why it mattered. Describe only prior state. Link earlier PR only when needed to explain prior state.
+
+## Changes
+
+Describe solution, new behavior, and current state in 2-5 high-level bullets.
+
+- **Important change.** What changed and why.
+- **Important change.** What changed and why.
+
+## QA
+
+Give instructions reader can follow to test PR. Include needed setup, actions, and expected result. Use numbered steps for end-to-end flows. Describe how to test change, not how author tested it.
+
+## Blast Radius
+
+Name affected areas and paths, breaking caller changes, people who need to know, senders and readers checked, and data migration status.
+```
+
+Group small edits under purpose. Skip generated files, minor edits, and renames unless reviewers need them.
+
+Keep each paragraph and list item on one physical line. Use newlines only between headings, paragraphs, and list items.
+
+## 3. Apply PR
+
+Write body to temp file. Check size:
+
+```bash
+wc -w "$BODY_FILE"
+```
+
+Trim body when over 250 words.
+
+If PR exists, update existing PR:
+
+```bash
+gh pr edit "$PR" --repo "$REPO" --title "$TITLE" --body-file "$BODY_FILE"
+```
+
+If PR does not exist, create it as draft:
+
+```bash
+gh pr create --draft --repo "$REPO" --title "$TITLE" --body-file "$BODY_FILE"
+```
+
+Show final PR URL.
