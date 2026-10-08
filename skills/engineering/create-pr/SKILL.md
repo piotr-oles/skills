@@ -23,7 +23,7 @@ Inspect every commit and full diff. Search codebase before each claim about call
 
 ## 2. Get motivation
 
-Ask user what was wrong or missing before PR and why it mattered. Offer 1-3 likely answers based on verified facts, and let user write different answer. Do not draft Motivation until user answers.
+Ask user what is wrong or missing without PR and why it matters. Offer 1-3 likely answers based on verified facts, and let user write different answer. Do not draft Motivation until user answers.
 
 ## 3. Draft title and body
 
@@ -38,7 +38,7 @@ Use these sections in this order:
 ```markdown
 ## Motivation
 
-One short paragraph about what was wrong or missing before PR, its effect, and why it mattered. Describe only prior state. Link earlier PR only when needed to explain prior state.
+Write one short paragraph in present tense about what is wrong or missing without PR, its effect, and why it matters. Describe only state without PR. Link earlier PR only when needed to explain that state.
 
 ## Changes
 
