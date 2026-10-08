@@ -42,18 +42,18 @@ Write one short paragraph in present tense about what is wrong or missing withou
 
 ## Changes
 
-Describe solution, new behavior, and current state in 2-5 high-level bullets.
+Describe new behavior in 1-5 high-level bullets.
 
-- **Important change.** What changed and why.
-- **Important change.** What changed and why.
+- What changed and why.
+- What changed and why.
 
 ## QA
 
-Give instructions reader can follow to test PR. Include needed setup, actions, and expected result. Use numbered steps for end-to-end flows. Describe how to test change, not how author tested it.
+Give instructions reader can follow to test PR. Include needed setup, actions, and expected result. Use numbered steps for end-to-end flows. Describe how to test change, not how author tested it. Don't include instructions how to run automated tests - they are already included in CI results.
 
 ## Blast Radius
 
-Name affected areas and paths, breaking caller changes, people who need to know, senders and readers checked, and data migration status.
+Name affected high-level areas (products, services), breaking  changes and data migration status (if applicable).
 ```
 
 Group small edits under purpose. Skip generated files, minor edits, and renames unless reviewers need them.
