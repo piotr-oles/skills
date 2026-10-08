@@ -36,3 +36,16 @@ When the shape of that interface is itself in question — how deep the module i
 - **Red before green.** Write the failing test first, then only enough code to pass it. Don't anticipate future tests or add speculative features.
 - **One slice at a time.** One seam, one test, one minimal implementation per cycle.
 - **Refactoring is not part of the loop.** It belongs to the review stage (see the `/review` skill), not the red → green implementation cycle.
+
+## Characterization-first loop
+
+Each slice uses **characterization-first**: commit a passing characterization test that records broken behavior, then commit the fix and intended-behavior test together.
+
+1. **Red.** Write an intended-behavior test before changing implementation. Confirm it fails on behavior, not setup or syntax.
+2. **Characterization.** Keep implementation unchanged.
+   1. **Save Red.** Run `git add -- <path/to/test>`, then `git stash create "tdd-red"`. Record the printed SHA across tool calls; use it in place of `<RED_SHA>` below.
+   2. **Characterize.** Keep input and public seam; assert the observed broken result as a fixed value. Name the test `document broken <behavior>`; add `// Broken: <explanation>` comment beside the assertion to explain the contract violation.
+   3. **Commit.** Confirm the test passes, then run `git commit --only -m "test: <document broken behavior>" -- <path/to/test>`.
+   4. **Restore Red.** Run `git restore --source=<RED_SHA> --worktree -- <path/to/test>`. Confirm the original failure; leave restoration uncommitted.
+3. **Green.** Make the minimal implementation change. Confirm the test and relevant suite pass.
+4. **Commit Green.** Commit implementation and intended-behavior test together.
